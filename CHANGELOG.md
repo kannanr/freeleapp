@@ -4,6 +4,16 @@ All notable changes to Freeleapp are documented here. Versions follow [Semantic 
 
 Freeleapp is based on **Leapp 0.26.1**. For the history before the fork, see the [Leapp changelog](https://github.com/Noovolari/leapp/blob/v0.26.1/CHANGELOG.md).
 
+## 1.3.2 (2026-10-13)
+
+### Bug Fixes
+
+- **The window no longer stays blank when its renderer process dies.** If something outside Freeleapp ends that process (a crash, running out of memory, another tool sending it a signal), the window loads again by itself within a second, as after a relaunch: sessions start stopped, so start the ones you need again. Silent SSO renewals resume with it. If the window can't stay up (three times in five minutes), quit and open Freeleapp. Each event is written to the log (`~/Library/Logs/Freeleapp`).
+
+### Features
+
+- The page that the browser shows after an AWS sign-in follows the app's theme, so it's dark when Freeleapp is dark.
+
 ## 1.3.1 (2026-10-08)
 
 ### Bug Fixes

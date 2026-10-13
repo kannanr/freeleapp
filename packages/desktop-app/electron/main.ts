@@ -6,6 +6,7 @@ import { environment } from "../src/environments/environment";
 const { app, BrowserWindow, ipcMain, Tray, Menu, systemPreferences } = require("electron");
 const electronLocalshortcut = require('electron-localshortcut');
 const { autoUpdater } = require("electron-updater");
+const log = require("electron-log");
 
 const url = require("url");
 const ipc = ipcMain;
@@ -56,6 +57,15 @@ if (process.platform !== "win32") {
 if (process.platform === "darwin") {
   windowDefaultConfig.browserWindow["trafficLightPosition"] = { x: 20, y: 20 };
 }
+
+// Main-process events go to the renderer's log file (same paths as AppService)
+const logDirs = {
+  darwin: path.join(app.getPath("home"), "Library/Logs/Freeleapp"),
+  win32: path.join(app.getPath("home"), "AppData/Roaming/Freeleapp"),
+};
+log.transports.file.resolvePath = () =>
+  path.join(logDirs[process.platform] || path.join(app.getPath("home"), ".config/Freeleapp/logs"), "log.electronService.log");
+log.transports.file.format = "[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] [{processType}] {text}";
 
 // Set by the Update button: the window closes for real (sessions are stopped first) and the updater quits the app
 let installingUpdate = false;
@@ -115,6 +125,10 @@ const buildAutoUpdater = (win: any): void => {
       setInterval(() => checkForUpdates("Periodic"), 1000 * 60 * minutes);
     } else if (autoDownload) {
       downloadUpdate();
+    }
+    // Sent again by a reloaded renderer, which no longer knows about the downloaded update
+    if (downloadedVersion) {
+      win.webContents.send("UPDATE_DOWNLOADED", { version: downloadedVersion });
     }
   });
 
@@ -181,6 +195,34 @@ const generateMainWindow = () => {
 
     // Small enough for window managers such as Rectangle (halves, thirds); the layout adapts below 900px
     win.setMinimumSize(560, 480);
+
+    // A dead renderer leaves a white window and stops the SSO renewals; load the app again (it starts like a
+    // relaunch: sessions stopped). At most 3 times in 5 minutes, so a renderer that keeps crashing doesn't loop.
+    const rendererReloads: number[] = [];
+    win.webContents.on("render-process-gone", (_, details) => {
+      log.error(`[RENDERER] Process gone: ${details.reason} (exit code ${details.exitCode})`);
+      if (forceQuit || installingUpdate || win.isDestroyed()) {
+        return;
+      }
+      const now = Date.now();
+      while (rendererReloads.length && now - rendererReloads[0] > 5 * 60 * 1000) {
+        rendererReloads.shift();
+      }
+      if (rendererReloads.length >= 3) {
+        log.error("[RENDERER] Gone 3 times in 5 minutes, not reloading again; quit and open Freeleapp");
+        return;
+      }
+      rendererReloads.push(now);
+      setTimeout(() => {
+        if (!win.isDestroyed()) {
+          log.info("[RENDERER] Reloading the window");
+          // index.html, not reload(): the router leaves file:///.../dashboard as the current URL
+          win.loadURL(url.format({ pathname: windowDefaultConfig.dir + "/index.html", protocol: "file:", slashes: true }));
+        }
+      }, 1000);
+    });
+    win.webContents.on("unresponsive", () => log.warn("[RENDERER] Window is not responding"));
+    win.webContents.on("responsive", () => log.info("[RENDERER] Window is responding again"));
 
     // Open the dev tools only if not in production
     if (!environment.production) {

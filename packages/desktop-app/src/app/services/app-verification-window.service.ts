@@ -183,8 +183,12 @@ export class AppVerificationWindowService implements IAwsSsoOidcVerificationWind
         response.writeHead(200, { ["Content-Type"]: "text/html; charset=utf-8" });
         response.end(
           ok
-            ? this.callbackPage("Freeleapp is signed in", "You can close this tab and go back to Freeleapp.")
-            : this.callbackPage("Sign-in failed", `AWS answered: ${this.escapeHtml(error || "an unexpected response")}. Try again from Freeleapp.`)
+            ? this.callbackPage("Freeleapp is signed in", "You can close this tab and go back to Freeleapp.", true)
+            : this.callbackPage(
+                "Sign-in failed",
+                `AWS answered: ${this.escapeHtml(error || "an unexpected response")}. Try again from Freeleapp.`,
+                false
+              )
         );
         finish(ok ? null : new Error(`AWS SSO sign-in failed: ${error || "invalid callback"}`), { code, redirectUri });
       });
@@ -247,11 +251,27 @@ export class AppVerificationWindowService implements IAwsSsoOidcVerificationWind
     });
   }
 
-  private callbackPage(title: string, message: string): string {
+  /** Self-contained page shown in the browser tab, in the app's current theme (palette.scss colors) */
+  private callbackPage(title: string, message: string, ok: boolean): string {
+    const dark = document.body.classList.contains("dark-theme");
+    const colors = dark
+      ? { scheme: "dark", background: "#23272d", card: "#1e2126", border: "#404040", text: "#dce1e7", muted: "#8b929c" }
+      : { scheme: "light", background: "#f3f3f3", card: "#ffffff", border: "#dfe1e2", text: "#171717", muted: "#666666" };
+    const accent = ok ? "#5ea9ee" : "#ff3b30";
+    const mark = ok ? `<path d="M7 12.5l3.2 3.2L17 9" />` : `<path d="M12 7.5v5.5" /><path d="M12 16.5v.01" />`;
     return (
-      `<!doctype html><html><head><meta charset="utf-8"><title>${title}</title></head>` +
-      `<body style="font-family:-apple-system,system-ui,sans-serif;text-align:center;padding-top:15vh">` +
-      `<h2>${title}</h2><p>${message}</p></body></html>`
+      `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="${colors.scheme}">` +
+      `<title>${title}</title><style>` +
+      `html,body{margin:0;height:100%}` +
+      `body{background:${colors.background};color:${colors.text};font-family:-apple-system,system-ui,sans-serif;` +
+      `display:flex;align-items:flex-start;justify-content:center}` +
+      `.card{margin-top:15vh;max-width:420px;padding:32px 40px;text-align:center;background:${colors.card};` +
+      `border:1px solid ${colors.border};border-radius:12px}` +
+      `svg{width:48px;height:48px;fill:none;stroke:${accent};stroke-width:2;stroke-linecap:round;stroke-linejoin:round}` +
+      `h2{margin:16px 0 8px;font-size:20px;font-weight:600}p{margin:0;color:${colors.muted};font-size:14px;line-height:1.5}` +
+      `</style></head><body><div class="card">` +
+      `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" />${mark}</svg>` +
+      `<h2>${title}</h2><p>${message}</p></div></body></html>`
     );
   }
 
