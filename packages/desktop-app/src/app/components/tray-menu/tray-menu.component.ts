@@ -1,5 +1,5 @@
 import { constants } from "@noovolari/leapp-core/models/constants";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
 import { AppService } from "../../services/app.service";
 import { environment } from "../../../environments/environment";
 import { UpdaterService } from "../../services/updater.service";
@@ -20,6 +20,7 @@ import { OperatingSystem } from "@noovolari/leapp-core/models/operating-system";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-tray-menu",
   templateUrl: "./tray-menu.component.html",
   styleUrls: ["./tray-menu.component.scss"],

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 import { AppService } from "../../../services/app.service";
 import { IGlobalColumns } from "../../command-bar/command-bar.component";
 import { Session } from "@noovolari/leapp-core/models/session";
@@ -13,6 +13,7 @@ import { SelectedSessionActionsService } from "../../../services/selected-sessio
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: "tr[app-session-card]",
   templateUrl: "./session-card.component.html",

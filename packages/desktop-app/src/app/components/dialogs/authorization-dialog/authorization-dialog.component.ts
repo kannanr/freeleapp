@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 import { BsModalRef } from "ngx-bootstrap/modal";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-authorization-dialog",
   templateUrl: "./authorization-dialog.component.html",
   styleUrls: ["./authorization-dialog.component.scss"],

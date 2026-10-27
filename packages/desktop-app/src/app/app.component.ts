@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, NgZone, OnInit } from "@angular/core";
 import { environment } from "../environments/environment";
 import { AppService } from "./services/app.service";
 import { Router } from "@angular/router";
@@ -29,6 +29,7 @@ import { AzureCoreService } from "@noovolari/leapp-core/services/azure-core-serv
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],

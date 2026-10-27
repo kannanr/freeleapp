@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, AfterContentChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { mainView, tunnelSearch } from "../../services/main-view";
 import { BsModalService } from "ngx-bootstrap/modal";
 import { OptionsDialogComponent } from "../dialogs/options-dialog/options-dialog.component";
@@ -48,6 +48,7 @@ export const globalColumnsCount = new BehaviorSubject<number>(null);
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-command-bar",
   templateUrl: "./command-bar.component.html",
   styleUrls: ["./command-bar.component.scss"],

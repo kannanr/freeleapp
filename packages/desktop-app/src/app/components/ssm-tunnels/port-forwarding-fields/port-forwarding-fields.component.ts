@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { TunnelDraft } from "../tunnel-draft";
 
 // Remote ports offered as one-click choices
@@ -14,6 +14,7 @@ export const commonPorts = [
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-port-forwarding-fields",
   templateUrl: "./port-forwarding-fields.component.html",
   styleUrls: ["./port-forwarding-fields.component.scss"],

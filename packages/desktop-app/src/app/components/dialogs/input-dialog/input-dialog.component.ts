@@ -1,10 +1,11 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { BsModalRef } from "ngx-bootstrap/modal";
 import { constants } from "@noovolari/leapp-core/models/constants";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-input-dialog",
   templateUrl: "./input-dialog.component.html",
   styleUrls: ["./input-dialog.component.scss"],

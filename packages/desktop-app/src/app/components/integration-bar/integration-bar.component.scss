@@ -104,6 +104,31 @@ img {
   color: $region-tag-color;
 }
 
+.integration-provider-icon {
+  position: relative;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+
+  img {
+    display: block;
+    position: static;
+    margin: 0;
+    width: 20px;
+    height: auto;
+  }
+
+  .status {
+    left: auto !important;
+    top: auto;
+    right: -2px;
+    bottom: -2px;
+    width: 8px;
+    height: 8px;
+  }
+}
+
 .loading-content {
   margin: 0 auto;
   padding: 20px;

@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from "@angular/core";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { FormGroup } from "@angular/forms";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-filter-menu",
   templateUrl: "./filter-menu.component.html",
   styleUrls: ["./filter-menu.component.scss"],

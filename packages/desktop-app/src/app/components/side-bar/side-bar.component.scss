@@ -337,3 +337,55 @@ app-sync-pro-widget {
   line-height: 20px;
   text-align: center;
 }
+
+// MDC list items now own their text wrappers. Keep every row equally inset; selecting or hovering must not move it.
+::ng-deep .side-bar .mat-mdc-list-base .mat-mdc-list-item,
+::ng-deep .side-bar .mat-mdc-list-base .mat-mdc-list-item:hover {
+  margin-left: 10px !important;
+  width: calc(100% - 20px) !important;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+::ng-deep .side-bar .mat-mdc-list-item .mdc-list-item__content {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 !important;
+  margin: 0;
+  left: 0 !important;
+}
+
+::ng-deep .side-bar .sidebar-row,
+::ng-deep .side-bar .sidebar-row:hover {
+  display: flex !important;
+  align-items: center !important;
+  width: 100%;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 20px;
+  font-size: 15px;
+}
+
+::ng-deep .side-bar .sidebar-row::before,
+::ng-deep .side-bar .sidebar-row::after {
+  display: none !important;
+}
+
+::ng-deep .side-bar .sidebar-row > i {
+  position: static !important;
+  flex: 0 0 20px;
+  margin: 0 8px 0 0 !important;
+  line-height: 20px;
+}
+
+::ng-deep .side-bar .sidebar-row > .sidebar-row-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto !important;
+  margin: 0 !important;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

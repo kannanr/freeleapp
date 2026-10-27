@@ -1,18 +1,18 @@
 <div class="sidebar-flex">
 <mat-list>
   <mat-list-item (click)="resetFilters();" class="counted-item {{this.showAll ? 'selected-segment' : ''}}">
-    <div mat-line><i class="moon-Row"></i> <span>Sessions</span>
+    <div matListItemTitle class="mat-line sidebar-row"><i class="moon-Row"></i> <span class="sidebar-row-label">Sessions</span>
       <span class="sidebar-count" *ngIf="activeSessions > 0" [matTooltip]="activeSessions + ' active ' + (activeSessions === 1 ? 'session' : 'sessions')">{{badge(activeSessions)}}</span></div>
   </mat-list-item>
   <mat-list-item (click)="showOnlyPinned();" class="{{this.showPinned ? 'selected-segment' : ''}}">
-    <div mat-line><i class="moon-Pin"></i> <span>Pinned Sessions</span></div>
+    <div matListItemTitle class="mat-line sidebar-row"><i class="moon-Pin"></i> <span class="sidebar-row-label">Pinned Sessions</span></div>
   </mat-list-item>
   <mat-list-item (click)="showTunnelsView(false);" class="counted-item {{this.showTunnels && !this.showPinnedTunnels ? 'selected-segment' : ''}}">
-    <div mat-line><i class="moon-Server"></i> <span>Tunnels</span>
+    <div matListItemTitle class="mat-line sidebar-row"><i class="moon-Server"></i> <span class="sidebar-row-label">Tunnels</span>
       <span class="sidebar-count" *ngIf="runningTunnels > 0" [matTooltip]="runningTunnels + ' running ' + (runningTunnels === 1 ? 'tunnel' : 'tunnels')">{{badge(runningTunnels)}}</span></div>
   </mat-list-item>
   <mat-list-item (click)="showTunnelsView(true);" class="{{this.showPinnedTunnels ? 'selected-segment' : ''}}">
-    <div mat-line><i class="moon-Pin"></i> <span>Pinned Tunnels</span></div>
+    <div matListItemTitle class="mat-line sidebar-row"><i class="moon-Pin"></i> <span class="sidebar-row-label">Pinned Tunnels</span></div>
   </mat-list-item>
   <div class="space-between-mat-lists"></div>
   <app-integration-bar></app-integration-bar>
@@ -21,13 +21,13 @@
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <div mat-subheader><span>Saved Filters</span><i class="moon-Caret-down"></i></div>
+          <div matSubheader><span>Saved Filters</span><i class="moon-Caret-down"></i></div>
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <mat-list-item [disableRipple]="true" *ngFor="let segment of segments" [ngClass]="selectedSegmentCheck(segment)"
                      (click)="applySegmentFilter(segment, $event);">
-        <div mat-line class="visible-option-menu segment-row"><i class="moon-Tag"></i> <span>{{segment.name}}</span><i class="moon-Close"
+        <div matListItemTitle class="mat-line sidebar-row visible-option-menu segment-row"><i class="moon-Tag"></i> <span class="sidebar-row-label">{{segment.name}}</span><i class="moon-Close"
                                                                                                                        (click)="showConfirmationDialog(segment, $event)"></i>
         </div>
       </mat-list-item>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AppService } from "../../../services/app.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -25,6 +25,7 @@ import { withRecentRegions } from "../../../services/region-options";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-edit-dialog",
   templateUrl: "./edit-dialog.component.html",
   styleUrls: ["./edit-dialog.component.scss"],

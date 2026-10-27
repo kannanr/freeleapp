@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit } from "@angular/core";
 import { combineLatest, BehaviorSubject, Subscription } from "rxjs";
 import { compactMode, sidebarCollapsed, sidebarToggleRequests } from "../../components/command-bar/command-bar.component";
 import { AppProviderService } from "../../services/app-provider.service";
@@ -17,6 +17,7 @@ const sidebarWidth = 240;
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-main-layout",
   templateUrl: "./main-layout.component.html",
   styleUrls: ["./main-layout.component.scss"],

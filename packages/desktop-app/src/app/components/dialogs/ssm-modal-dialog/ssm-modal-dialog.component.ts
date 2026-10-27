@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 import { Session } from "@noovolari/leapp-core/models/session";
 import { AppService } from "../../../services/app.service";
 import { AppProviderService } from "../../../services/app-provider.service";
@@ -18,6 +18,7 @@ import { SessionStatus } from "@noovolari/leapp-core/models/session-status";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-ssm-modal-dialog",
   templateUrl: "./ssm-modal-dialog.component.html",
   styleUrls: ["./ssm-modal-dialog.component.scss"],

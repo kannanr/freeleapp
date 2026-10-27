@@ -2,9 +2,13 @@
 
 ## Baseline
 
-The audited hardening work is preserved in local commit `f9d54a3e`. This upgrade is a separate change on the same
-checkout and branch; nothing has been pushed. Build/test success is a compatibility signal, not production-security
+The audited hardening work is preserved in commit `f9d54a3e`. This upgrade is a separate change on the same
+checkout and branch and is published with the 1.3.3 follow-up release. Build/test success is a compatibility signal, not production-security
 approval or proof that native authentication flows work.
+
+The follow-up fixes are included in version 1.3.3. GitHub release assets are DMG-only and use the original
+`Freeleapp-<version>-arm64.dmg` convention. Signed/notarized CI publication is manually dispatched for an existing tag,
+so pushing a tag cannot race a locally built development release or attach ZIP/blockmap/updater files.
 
 ## Target versions and compatibility decisions
 
@@ -48,6 +52,28 @@ in the final verification section below; no peer-dependency override is permissi
 - Locate bundled changelog files through the Electron application path, not Webpack's former `__dirname` shim.
 - Repair a real untracked integration-highlight subscription and verify that destroyed views stop receiving highlights.
 - Keep all prior hardening controls, including disabled auto-updates, fork-owned release destinations and restrictive CSP.
+
+### Native UI regression follow-up
+
+Angular 22 also defaults components to OnPush, unlike the app's previous eager view checks. The original upgrade did
+not preserve that default: RxJS callbacks updated session-filter state without refreshing sibling views, so pinned
+sessions appeared stale until switching through Tunnels recreated the view. Production Electron reproduction with
+synthetic sessions confirmed this; explicitly retaining `ChangeDetectionStrategy.Eager` restores the previous behavior.
+Standalone and Zone.js compatibility alone were not sufficient.
+
+Material MDC list children additionally resolve their own label/icon color tokens. Dark-mode host inheritance did not
+reach those children, and the selected-row inset differed by 10px from other rows. Updated token overrides, supported
+`matListItemTitle`/`matSubheader` markup and common row geometry restore readable, aligned navigation.
+
+The isolated production-UI harness is `npm run test:ui-fixture`, after the production renderer/core builds. It creates
+only synthetic session/integration records in a marked temporary HOME, stubs credential/process APIs, blocks network
+requests, and uses a mock Chromium keychain. Set `FREELEAPP_UI_THEME=light` to check light mode;
+`FREELEAPP_PUPPETEER_PATH` can point to an installed puppeteer-core module. It never copies the user's browser profile.
+
+Automated Chrome/Karma launchers now use `--use-mock-keychain` and `--password-store=basic`. Earlier temporary-HOME
+tests lacked those flags and could request macOS's real keychain, making them a plausible source of the reported
+"A keychain cannot be found to store Chrome" dialog. The requesting process was not captured, so causal attribution
+of that specific popup is not confirmed. No keychain reset, deletion, search-list change or password read was performed.
 
 ## Verification
 

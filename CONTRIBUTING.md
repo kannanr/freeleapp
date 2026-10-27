@@ -30,5 +30,10 @@ Fixes that also apply to upstream Leapp can be sent to [Noovolari/leapp](https:/
 1. On `master`, set the new version in `packages/desktop-app/package.json` (and its lockfile) and date its section in `CHANGELOG.md` (`## 1.2.3 (YYYY-MM-DD)`).
 2. Commit as `chore(release): 1.2.3` and push.
 3. Tag and push: `git tag -a v1.2.3 -m "Freeleapp 1.2.3" && git push origin v1.2.3`.
+4. Publishing is separate from tag pushes. For signed/notarized builds, manually dispatch the Release workflow with
+   the existing tag. It publishes only `Freeleapp-<version>-arm64.dmg`; local development releases must explicitly
+   disclose ad-hoc signing and lack of notarization in their release notes.
 
-The Release workflow checks that the tag, the app version and the changelog agree, builds the app, and publishes a GitHub Release with the dmg, the zip and `latest-mac.yml` used by the in-app update check. The release notes come from the changelog section.
+The Release workflow checks that the tag, the app version and the changelog agree, builds the tagged source, and
+publishes a GitHub Release with the DMG only. The release notes come from the changelog section. Automatic updates
+remain disabled in this security fork; no update-feed assets or upstream Homebrew tap changes are published.

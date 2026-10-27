@@ -201,6 +201,11 @@ test('credential-bearing CI and release actions are pinned and fork-owned', () =
   const release = fs.readFileSync(path.join(root, '.github/workflows/release.yml'), 'utf8');
   assert.doesNotMatch(release, /sergioarojasm98\/tap|sergioarojasm98\/homebrew-tap|HOMEBREW_TAP_TOKEN/);
   assert.match(release, /npm run test:security/);
+  assert.match(release, /workflow_dispatch:/);
+  assert.doesNotMatch(release, /tags:\s*\[/);
+  assert.match(release, /DMG="dist\/Freeleapp-\$VERSION-arm64\.dmg"/);
+  assert.match(release, /gh release create "\$RELEASE_TAG" "\$DMG"/);
+  assert.doesNotMatch(release, /gh release create[^\n]*dist\/\*/);
 });
 
 test('the upgraded app retains zone-based rendering and NgModule declarations', () => {
@@ -217,6 +222,9 @@ test('the upgraded app retains zone-based rendering and NgModule declarations', 
         const source = fs.readFileSync(file, 'utf8');
         for (const declaration of source.matchAll(/@(Component|Pipe|Directive)\(\{([^]*?)\}\)/g)) {
           assert.match(declaration[2], /standalone:\s*false/, file);
+          if (declaration[1] === 'Component') {
+            assert.match(declaration[2], /changeDetection:\s*ChangeDetectionStrategy\.Eager/, file);
+          }
         }
       }
     }

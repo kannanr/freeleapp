@@ -1,7 +1,7 @@
 # Freeleapp — security fork
 
 **Not yet approved for production cloud credentials.** This fork tracks the security audit and hardening work in
-[docs/security/AUDIT.md](docs/security/AUDIT.md). No audited signed release of this fork has been published.
+[docs/security/AUDIT.md](docs/security/AUDIT.md). Version 1.3.3 is an ad-hoc-signed development release, not a Developer-ID-signed/notarized release.
 Upstream binaries and the upstream Homebrew cask do **not** contain these patches.
 
 Temporary AWS and Azure credentials on your Mac, one click away. A maintained, free and open-source continuation of the [Leapp](https://github.com/Noovolari/leapp) desktop app.
@@ -47,8 +47,8 @@ The core library (`packages/core`) holds the session logic and the desktop app i
 
 ## Install
 
-There is no approved installation of this security fork yet. Future signed Apple Silicon builds will be published
-under [kannanr/freeleapp Releases](https://github.com/kannanr/freeleapp/releases), after the audit blockers are resolved.
+Apple Silicon development images are published under [kannanr/freeleapp Releases](https://github.com/kannanr/freeleapp/releases)
+as `Freeleapp-<version>-arm64.dmg`. They are ad-hoc signed and not notarized; publishing them does not resolve the audit blockers.
 Do not use `sergioarojasm98/tap/freeleapp` to install this fork; it installs upstream Freeleapp.
 
 ## Build
@@ -65,7 +65,7 @@ npx electron-builder build --mac dir --arm64 --publish never -c.mac.identity=nul
 Without `-c.mac.identity=null`, electron-builder signs with a Developer ID certificate from the keychain (or `CSC_LINK`). Release builds are signed and notarized in GitHub Actions.
 
 Tests: `npm run test:security` at the root, `npx jest` in `packages/core`, and
-`npm test -- --watch=false --browsers=ChromeHeadless` in `packages/desktop-app`.
+`npm test -- --watch=false --browsers=ChromeHeadlessSafe` in `packages/desktop-app`.
 
 ## License
 

@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, NgZone, OnChanges, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
 import { BsModalService } from "ngx-bootstrap/modal";
 import { SsmTunnel, SsmTunnelState, SsmTunnelStatus } from "@noovolari/leapp-core/models/ssm-tunnel";
@@ -24,6 +24,7 @@ const statusLabels: Record<SsmTunnelStatus, string> = {
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-ssm-tunnels",
   templateUrl: "./ssm-tunnels.component.html",
   styleUrls: ["./ssm-tunnels.component.scss"],

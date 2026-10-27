@@ -35,8 +35,6 @@ describe("SideBarComponent", () => {
     fixture = TestBed.createComponent(SideBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
-    (component as any).unsubscribe = () => {};
   });
 
   it("should create", () => {

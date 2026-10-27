@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { AppService } from "../../../services/app.service";
 import { FormControl, FormGroup } from "@angular/forms";
 import { globalFilterGroup } from "../../command-bar/command-bar.component";
@@ -9,6 +9,7 @@ import { AppProviderService } from "../../../services/app-provider.service";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-segment-dialog",
   templateUrl: "./segment-dialog.component.html",
   styleUrls: ["./segment-dialog.component.scss"],

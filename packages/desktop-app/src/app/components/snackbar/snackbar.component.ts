@@ -1,9 +1,10 @@
-import { Component, Inject, NgZone, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Inject, NgZone, OnInit } from "@angular/core";
 import { MAT_SNACK_BAR_DATA, MatSnackBar } from "@angular/material/snack-bar";
 import { AppProviderService } from "../../services/app-provider.service";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-snackbar",
   templateUrl: "./snackbar.component.html",
   styleUrls: ["./snackbar.component.scss"],

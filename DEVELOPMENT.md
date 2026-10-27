@@ -42,13 +42,17 @@ Workspace data lives in `~/.freeleapp`, logs in `~/Library/Logs/Freeleapp`. To t
 ```bash
 npm run test:security                         # from the root; synthetic values only
 cd packages/core && npx jest
-cd packages/desktop-app && npm test -- --watch=false --browsers=ChromeHeadless
+cd packages/desktop-app && npm test -- --watch=false --browsers=ChromeHeadlessSafe
 npx eslint <files>                            # from the repository root
 ```
 
 Compatibility decisions and remaining verification limits are recorded in [docs/security/UPGRADE.md](docs/security/UPGRADE.md).
 Do not use peer-dependency override flags to hide incompatibilities or give a development build real cloud credentials
 before the blockers in [docs/security/AUDIT.md](docs/security/AUDIT.md) are resolved.
+
+Use the `ChromeSafe`/`ChromeHeadlessSafe` launchers for local tests, not bare Chrome: test profiles must use mock
+keychains and never request the user's password store. `npm run test:ui-fixture` runs a synthetic-data Electron
+production-renderer check after building, without installing the application or reading cloud credentials.
 
 ## Linux notes
 

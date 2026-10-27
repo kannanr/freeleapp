@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 import { SsmTunnel } from "@noovolari/leapp-core/models/ssm-tunnel";
 import { validatePortForwarding } from "@noovolari/leapp-core/services/ssm-service";
 import { constants } from "@noovolari/leapp-core/models/constants";
@@ -9,6 +9,7 @@ import { defaultTunnelName, resolveForwarding, TunnelDraft, tunnelDraftFrom } fr
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-ssm-tunnel-dialog",
   templateUrl: "./ssm-tunnel-dialog.component.html",
   styleUrls: ["./ssm-tunnel-dialog.component.scss"],

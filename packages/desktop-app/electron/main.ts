@@ -76,8 +76,9 @@ const buildAutoUpdater = (win: any): void => {
   // A fork must never silently replace its security patches with an upstream release.
   // Enable only after this fork has its own independently verified signed releases.
   const metadata = require("../../../package.json");
-  const feed = metadata.build.publish[0];
-  if (!app.isPackaged || metadata.security?.autoUpdatesEnabled !== true || feed.owner !== "kannanr" || feed.repo !== "freeleapp") {
+  // electron-builder strips `build` from the packaged manifest: absent configuration must fail closed.
+  const feed = metadata.build?.publish?.[0];
+  if (!app.isPackaged || metadata.security?.autoUpdatesEnabled !== true || feed?.owner !== "kannanr" || feed?.repo !== "freeleapp") {
     log.info("[AUTO-UPDATER] Disabled pending audited, signed fork releases");
     return;
   }

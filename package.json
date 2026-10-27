@@ -34,6 +34,7 @@
   },
   "scripts": {
     "test:security": "node --test scripts/security/*.test.cjs",
+    "test:ui-fixture": "node scripts/ui-fixture/check.cjs",
     "bootstrap": "npm install && gushio gushio/bootstrap.js core desktop-app",
     "clean-and-bootstrap": "npm install && gushio gushio/clean-and-bootstrap.js core desktop-app",
     "lint": "eslint .",

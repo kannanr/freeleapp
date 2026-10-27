@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 import { SessionType } from "@noovolari/leapp-core/models/session-type";
 import { AppService } from "../../../services/app.service";
 import { AppProviderService } from "../../../services/app-provider.service";
@@ -11,6 +11,7 @@ import { withRecentRegions } from "../../../services/region-options";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-change-region-dialog",
   templateUrl: "./change-region-dialog.component.html",
   styleUrls: ["./change-region-dialog.component.scss"],

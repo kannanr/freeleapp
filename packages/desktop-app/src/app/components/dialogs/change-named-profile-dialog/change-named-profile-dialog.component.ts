@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 import { Session } from "@noovolari/leapp-core/models/session";
 import { AppService } from "../../../services/app.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
@@ -9,6 +9,7 @@ import * as uuid from "uuid";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-change-named-profile-dialog",
   templateUrl: "./change-named-profile-dialog.component.html",
   styleUrls: ["./change-named-profile-dialog.component.scss"],

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output, SecurityContext, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, AfterViewInit, Component, EventEmitter, Input, Output, SecurityContext, ViewChild } from "@angular/core";
 import { NgSelectComponent } from "@ng-select/ng-select";
 import { FormGroup } from "@angular/forms";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -7,6 +7,7 @@ import { LoggedEntry, LogLevel } from "@noovolari/leapp-core/services/log-servic
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-leapp-select",
   templateUrl: "./leapp-select.component.html",
   styleUrls: ["./leapp-select.component.scss"],

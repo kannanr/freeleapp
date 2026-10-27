@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 import { BsModalRef } from "ngx-bootstrap/modal";
 import { WindowService } from "../../../services/window.service";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-info-dialog",
   templateUrl: "./info-dialog.component.html",
   styleUrls: ["./info-dialog.component.scss"],

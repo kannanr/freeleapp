@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import {
   globalFilteredSessions,
   globalFilterGroup,
@@ -37,6 +37,7 @@ export const sidebarHighlight = new BehaviorSubject<HighlightSettings>({ showAll
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-side-bar",
   templateUrl: "./side-bar.component.html",
   styleUrls: ["./side-bar.component.scss"],

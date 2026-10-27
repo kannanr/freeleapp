@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output } from "@angular/core";
 
 const openPanels = "ng-dropdown-panel, .cdk-overlay-pane .mat-menu-panel, .cdk-overlay-pane .mat-mdc-menu-panel";
 
@@ -8,6 +8,7 @@ const openPanels = "ng-dropdown-panel, .cdk-overlay-pane .mat-menu-panel, .cdk-o
  */
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-dialog-escape",
   template: "",
 })

@@ -45,6 +45,22 @@ body.dark-theme {
     color: $dark-main-text-color;
   }
 
+  // MDC labels/icons resolve these tokens independently, so setting only their host's color is insufficient.
+  .side-bar {
+    --mat-list-list-item-label-text-color: #{$dark-main-text-color};
+    --mat-list-list-item-hover-label-text-color: #{$dark-main-text-color};
+    --mat-list-list-item-focus-label-text-color: #{$dark-main-text-color};
+    --mat-list-list-item-supporting-text-color: #{$dark-main-text-color};
+    --mat-list-list-item-leading-icon-color: #{$dark-main-text-color};
+    --mat-list-list-item-trailing-icon-color: #{$dark-main-text-color};
+
+    .sidebar-row,
+    .sidebar-row-label,
+    .sidebar-row > i {
+      color: $dark-main-text-color;
+    }
+  }
+
   .fa-circle.fas.offline {
     color: $dark-offline-session!important;
   }

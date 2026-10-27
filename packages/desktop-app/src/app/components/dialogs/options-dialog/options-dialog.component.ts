@@ -1,4 +1,15 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AppService } from "../../../services/app.service";
 import { Router } from "@angular/router";
@@ -22,6 +33,7 @@ import { UpdaterService } from "../../../services/updater.service";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-options-dialog",
   templateUrl: "./options-dialog.component.html",
   styleUrls: ["./options-dialog.component.scss"],

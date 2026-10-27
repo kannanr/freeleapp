@@ -4,6 +4,29 @@ All notable changes to Freeleapp are documented here. Versions follow [Semantic 
 
 Freeleapp is based on **Leapp 0.26.1**. For the history before the fork, see the [Leapp changelog](https://github.com/Noovolari/leapp/blob/v0.26.1/CHANGELOG.md).
 
+## 1.3.3 (2026-10-27)
+
+### Bug Fixes
+
+- Restore immediate Sessions/Pinned Sessions switching without having to visit Tunnels first. Preserve eager change detection for the existing RxJS-driven UI after the Angular 22 upgrade.
+- Restore dark-theme sidebar text/icon contrast and consistent horizontal/vertical alignment using supported Material MDC list markup and tokens.
+- Prevent a packaged-startup exception when electron-builder strips build settings from the application manifest. Missing update-feed settings now fail closed.
+- Release notes load from the bundled application directory instead of relying on a Webpack `__dirname` shim.
+- Unsubscribe destroyed integration views from highlight notifications.
+
+### Security and Maintenance
+
+- Update the compatible Node/Angular/Electron/AWS/MSAL tooling stack; retain compatible TypeScript/Jasmine versions rather than bypass peer checks.
+- Remove live CDN JavaScript from the privileged renderer, tighten CSP/navigation/IPC controls, protect credential-file permissions and redact sensitive command logs.
+- Keep automatic updates disabled and release destinations specific to this fork.
+- Isolated test browsers use mock keychains and temporary profiles; native UI regression checks use only synthetic workspace data and stub credential APIs.
+
+### Distribution and Limitations
+
+- Apple Silicon DMG only: `Freeleapp-1.3.3-arm64.dmg`.
+- This fork's locally built image is **ad-hoc signed, not Developer-ID signed or notarized**. It is not a production-security certification; legacy keychain items may still require per-item authorization.
+- Live cloud authentication and the open renderer-isolation/security findings remain outside the synthetic test coverage. See `docs/security/AUDIT.md` and `docs/security/UI-REGRESSIONS.md`.
+
 ## 1.3.2 (2026-10-13)
 
 ### Bug Fixes

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { Session } from "@noovolari/leapp-core/models/session";
 import { AppService } from "../../services/app.service";
 import { MatMenuTrigger } from "@angular/material/menu";
@@ -13,6 +13,7 @@ import { Subscription } from "rxjs";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-contextual-menu",
   templateUrl: "./contextual-menu.component.html",
   styleUrls: ["./contextual-menu.component.scss"],

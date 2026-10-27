@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AppService } from "../../../services/app.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -27,6 +27,7 @@ import { withRecentRegions } from "../../../services/region-options";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-create-dialog",
   templateUrl: "./create-dialog.component.html",
   styleUrls: ["./create-dialog.component.scss"],

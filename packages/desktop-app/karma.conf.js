@@ -36,12 +36,21 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
+    browsers: ['ChromeSafe'],
     customLaunchers: {
+      ChromeSafe: {
+        base: 'Chrome',
+        flags: ['--use-mock-keychain', '--password-store=basic'],
+      },
+      // Isolated test HOME/profile must never request the real macOS login keychain.
+      ChromeHeadlessSafe: {
+        base: 'ChromeHeadless',
+        flags: ['--use-mock-keychain', '--password-store=basic'],
+      },
       // GitHub-hosted Ubuntu runners block Chrome's user namespace sandbox
       ChromeHeadlessCI: {
         base: 'ChromeHeadless',
-        flags: ['--no-sandbox'],
+        flags: ['--no-sandbox', '--use-mock-keychain', '--password-store=basic'],
       },
     },
     singleRun: false,

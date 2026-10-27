@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { AppProviderService } from "../../services/app-provider.service";
 import { AppService } from "../../services/app.service";
 import { constants } from "@noovolari/leapp-core/models/constants";
@@ -8,6 +8,7 @@ export const colorThemeSubject = new BehaviorSubject(false);
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-check-icon-svg",
   templateUrl: "./check-icon-svg.component.html",
   styleUrls: ["./check-icon-svg.component.scss"],

@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { SessionType } from "@noovolari/leapp-core/models/session-type";
 import { Session } from "@noovolari/leapp-core/models/session";
 import { SessionStatus } from "@noovolari/leapp-core/models/session-status";
@@ -7,6 +7,7 @@ import { OptionsService } from "../../services/options.service";
 
 @Component({
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: "app-bottom-bar",
   templateUrl: "./bottom-bar.component.html",
   styleUrls: ["./bottom-bar.component.scss"],
