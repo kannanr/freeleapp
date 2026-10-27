@@ -1,7 +1,6 @@
-import { JsonCache, SerializedRefreshTokenEntity } from "@azure/msal-node";
+import { JsonCache, SerializedRefreshTokenEntity, SerializedAccountEntity } from "@azure/msal-node";
 import { INativeService } from "../interfaces/i-native-service";
 import { constants } from "../models/constants";
-import { SerializedAccountEntity } from "@azure/msal-node/dist/cache/serializer/SerializerTypes";
 import { IKeychainService } from "../interfaces/i-keychain-service";
 import { writePrivateFileSync } from "./private-file";
 
@@ -34,7 +33,10 @@ export interface AzureSecrets {
 }
 
 export class AzurePersistenceService {
-  constructor(private iNativeService: INativeService, private keychainService: IKeychainService) {}
+  constructor(
+    private iNativeService: INativeService,
+    private keychainService: IKeychainService
+  ) {}
 
   async loadMsalCache(): Promise<JsonCache> {
     const isWin = this.iNativeService.process.platform === "win32";

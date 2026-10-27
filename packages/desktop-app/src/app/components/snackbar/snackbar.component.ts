@@ -3,6 +3,7 @@ import { MAT_SNACK_BAR_DATA, MatSnackBar } from "@angular/material/snack-bar";
 import { AppProviderService } from "../../services/app-provider.service";
 
 @Component({
+  standalone: false,
   selector: "app-snackbar",
   templateUrl: "./snackbar.component.html",
   styleUrls: ["./snackbar.component.scss"],

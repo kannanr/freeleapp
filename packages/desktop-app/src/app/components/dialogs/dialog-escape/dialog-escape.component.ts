@@ -7,6 +7,7 @@ const openPanels = "ng-dropdown-panel, .cdk-overlay-pane .mat-menu-panel, .cdk-o
  * reacts, and not while a dropdown or menu is open, since Escape closes that first.
  */
 @Component({
+  standalone: false,
   selector: "app-dialog-escape",
   template: "",
 })

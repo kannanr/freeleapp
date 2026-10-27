@@ -13,6 +13,7 @@ export const commonPorts = [
 ];
 
 @Component({
+  standalone: false,
   selector: "app-port-forwarding-fields",
   templateUrl: "./port-forwarding-fields.component.html",
   styleUrls: ["./port-forwarding-fields.component.scss"],

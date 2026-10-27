@@ -12,6 +12,7 @@ import { SelectedSessionActionsService } from "../../services/selected-session-a
 import { Subscription } from "rxjs";
 
 @Component({
+  standalone: false,
   selector: "app-contextual-menu",
   templateUrl: "./contextual-menu.component.html",
   styleUrls: ["./contextual-menu.component.scss"],

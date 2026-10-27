@@ -36,6 +36,7 @@ export const segmentFilter = new BehaviorSubject<Segment[]>([]);
 export const sidebarHighlight = new BehaviorSubject<HighlightSettings>({ showAll: false, showPinned: true, selectedSegment: -1 });
 
 @Component({
+  standalone: false,
   selector: "app-side-bar",
   templateUrl: "./side-bar.component.html",
   styleUrls: ["./side-bar.component.scss"],

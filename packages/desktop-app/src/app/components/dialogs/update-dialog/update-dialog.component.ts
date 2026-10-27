@@ -3,6 +3,7 @@ import { BsModalRef } from "ngx-bootstrap/modal";
 import { constants } from "@noovolari/leapp-core/models/constants";
 
 @Component({
+  standalone: false,
   selector: "app-update-dialog",
   templateUrl: "./update-dialog.component.html",
   styleUrls: ["./update-dialog.component.scss"],

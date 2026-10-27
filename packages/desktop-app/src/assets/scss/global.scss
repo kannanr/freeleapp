@@ -60,21 +60,21 @@ html, body {
     box-shadow: none;
   }
 
-  .mat-menu-panel {
+  .mat-mdc-menu-panel {
     box-shadow: 0 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
     border-radius: $border-radius;
     background-color: white !important;
     
-    .mat-menu-content {
+    .mat-mdc-menu-content {
       background-color: white !important;
     }
     
-    .mat-menu-item,
+    .mat-mdc-menu-item,
     .mat-legacy-menu-item {
       background-color: white !important;
       
       &:hover,
-      &.mat-menu-item-highlighted,
+      &.mat-mdc-menu-item-highlighted,
       &.mat-legacy-menu-item-highlighted,
       &:focus {
         background-color: white !important;
@@ -86,20 +86,20 @@ html, body {
     border-top: none !important;
   }
 
-  .mat-menu-item i {
+  .mat-mdc-menu-item i {
     font-size: 20px;
     position: relative;
     top: 2px;
   }
 
-  .mat-menu-item[disabled] {
+  .mat-mdc-menu-item[disabled] {
     opacity: 0.5;
   }
 
-  .mat-menu-item:hover:not([disabled]),
-  .mat-menu-item.cdk-program-focused:not([disabled]),
-  .mat-menu-item.cdk-keyboard-focused:not([disabled]),
-  .mat-menu-item-highlighted:not([disabled]) {
+  .mat-mdc-menu-item:hover:not([disabled]),
+  .mat-mdc-menu-item.cdk-program-focused:not([disabled]),
+  .mat-mdc-menu-item.cdk-keyboard-focused:not([disabled]),
+  .mat-mdc-menu-item-highlighted:not([disabled]) {
     background: $white-text-color;
 
     &::after {
@@ -115,7 +115,7 @@ html, body {
     }
   }
 
-  .mat-tab-body-wrapper {
+  .mat-mdc-tab-body-wrapper {
     padding: 0 19px;
     min-height: 386px;
   }
@@ -126,7 +126,7 @@ html, body {
     }
   }
 
-  .mat-tab-group {
+  .mat-mdc-tab-group {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
@@ -432,18 +432,18 @@ small.text-error {
   border: none;
 }
 
-.mat-tab-labels {
+.mat-mdc-tab-labels {
   display: flex;
   justify-content: center;
 }
 
-.mat-tab-header {
+.mat-mdc-tab-header {
   background: transparent;
   margin: 0;
 }
 
 /* Styles for tab labels */
-.mat-tab-label {
+.mat-mdc-tab {
   min-width: 25px !important;
   background-color: #ffffff;
   text-align: center !important;
@@ -455,7 +455,7 @@ small.text-error {
 }
 
 /* Styles for the active tab label */
-.mat-tab-label.mat-tab-label-active {
+.mat-mdc-tab.mdc-tab--active {
   min-width: 25px !important;
   text-align: center !important;
   font-weight: normal;
@@ -463,18 +463,18 @@ small.text-error {
   color: $black;
   opacity: 1;
 
-  .mat-tab-label-content {
+  .mdc-tab__content {
     background-color: $silver-30;
     border-radius: $border-radius;
   }
 }
 
 /* Styles for the ink bar */
-.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
-  height: 0;
+.mat-mdc-tab-group.mat-primary .mdc-tab-indicator__content--underline, .mat-mdc-tab-nav-bar.mat-primary .mdc-tab-indicator__content--underline {
+  border-top-width: 0;
 }
 
-.mat-tab-label, .mat-tab-label-content {
+.mat-mdc-tab, .mdc-tab__content {
   display: inline-flex !important;
   flex-direction: column !important;
   text-align: center;
@@ -497,22 +497,22 @@ small.text-error {
   display: none !important;
 }
 
-.mat-list-base .mat-subheader {
+.mat-mdc-list-base .mat-mdc-subheader {
   font-size: 14px !important;
   color: $table-text;
   font: unset !important;
 }
 
-.mat-list-base .mat-subheader:first-child {
+.mat-mdc-list-base .mat-mdc-subheader:first-child {
   padding-top: 10px;
   margin-left: -10px;
 }
 
-.mat-list-base .mat-list-item,
-.mat-list-base .mat-list-item.mat-list-item-with-avatar,
-.mat-list-base .mat-list-option.mat-list-item-with-avatar,
-.mat-list-base .mat-list-item.mat-list-item-with-avatar,
-.mat-list-base .mat-list-option.mat-list-item-with-avatar {
+.mat-mdc-list-base .mat-mdc-list-item,
+.mat-mdc-list-base .mat-mdc-list-item.mat-list-item-with-avatar,
+.mat-mdc-list-base .mat-list-option.mat-list-item-with-avatar,
+.mat-mdc-list-base .mat-mdc-list-item.mat-list-item-with-avatar,
+.mat-mdc-list-base .mat-list-option.mat-list-item-with-avatar {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   height: 35px !important;
   font-size: 14px;
@@ -523,7 +523,7 @@ small.text-error {
     margin-left: 10px !important;
     width: 218px !important;
 
-    .mat-list-item-content .mat-list-text {
+    .mdc-list-item__content .mat-mdc-list-item-unscoped-content {
       margin-left: -10px;
     }
   }
@@ -549,7 +549,7 @@ small.text-error {
   box-shadow: none !important;
 }
 
-.mat-subheader {
+.mat-mdc-subheader {
   display: flex;
   box-sizing: border-box;
   padding: 12px 16px !important;
@@ -578,7 +578,7 @@ small.text-error {
   width: 218px !important;
   transition: all 0.2s ease;
 
-  .mat-list-item-content {
+  .mdc-list-item__content {
     padding: 0 6px !important;
 
     .status {
@@ -587,7 +587,7 @@ small.text-error {
   }
 
   &:hover {
-    .mat-list-item-content {
+    .mdc-list-item__content {
       left: 1px;
 
       .status {
@@ -865,7 +865,7 @@ button, a, input, i {
     border-color: #666;
   }
 
-  .mat-menu-panel {
+  .mat-mdc-menu-panel {
     min-height: initial !important;
   }
 }

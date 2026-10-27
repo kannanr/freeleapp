@@ -21,6 +21,7 @@ import { withRecentRegions } from "../../../services/region-options";
 import { UpdaterService } from "../../../services/updater.service";
 
 @Component({
+  standalone: false,
   selector: "app-options-dialog",
   templateUrl: "./options-dialog.component.html",
   styleUrls: ["./options-dialog.component.scss"],

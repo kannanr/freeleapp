@@ -7,6 +7,7 @@ import { BehaviorSubject } from "rxjs";
 export const colorThemeSubject = new BehaviorSubject(false);
 
 @Component({
+  standalone: false,
   selector: "app-check-icon-svg",
   templateUrl: "./check-icon-svg.component.html",
   styleUrls: ["./check-icon-svg.component.scss"],
@@ -16,7 +17,10 @@ export class CheckIconSvgComponent implements OnInit, OnDestroy {
   color: string;
   subscription;
   originalColor: string;
-  constructor(private appProviderService: AppProviderService, private appService: AppService) {
+  constructor(
+    private appProviderService: AppProviderService,
+    private appService: AppService
+  ) {
     this.color = "#000000";
     this.subscription = colorThemeSubject.subscribe((value) => {
       if (value) {

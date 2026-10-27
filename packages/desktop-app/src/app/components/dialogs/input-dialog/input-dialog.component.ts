@@ -4,6 +4,7 @@ import { BsModalRef } from "ngx-bootstrap/modal";
 import { constants } from "@noovolari/leapp-core/models/constants";
 
 @Component({
+  standalone: false,
   selector: "app-input-dialog",
   templateUrl: "./input-dialog.component.html",
   styleUrls: ["./input-dialog.component.scss"],

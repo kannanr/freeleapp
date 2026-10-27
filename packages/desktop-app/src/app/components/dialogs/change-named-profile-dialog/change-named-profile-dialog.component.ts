@@ -8,6 +8,7 @@ import { SessionType } from "@noovolari/leapp-core/models/session-type";
 import * as uuid from "uuid";
 
 @Component({
+  standalone: false,
   selector: "app-change-named-profile-dialog",
   templateUrl: "./change-named-profile-dialog.component.html",
   styleUrls: ["./change-named-profile-dialog.component.scss"],
@@ -21,7 +22,11 @@ export class ChangeNamedProfileDialogComponent implements OnInit {
   public selectedProfile: any;
   public profiles: { value: string; label: string }[];
 
-  constructor(private appService: AppService, private appProviderService: AppProviderService, private messageToasterService: MessageToasterService) {}
+  constructor(
+    private appService: AppService,
+    private appProviderService: AppProviderService,
+    private messageToasterService: MessageToasterService
+  ) {}
 
   ngOnInit(): void {
     this.profiles = this.appProviderService.namedProfileService.getNamedProfiles().map((p) => ({ label: p.name, value: p.id }));

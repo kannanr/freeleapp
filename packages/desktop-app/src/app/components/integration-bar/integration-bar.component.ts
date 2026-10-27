@@ -3,8 +3,8 @@ import { globalFilterGroup } from "../command-bar/command-bar.component";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { BehaviorSubject } from "rxjs";
-import { MatLegacyMenuTrigger } from "@angular/material/legacy-menu";
+import { BehaviorSubject, Subscription } from "rxjs";
+import { MatMenuTrigger } from "@angular/material/menu";
 import { AwsSsoIntegration } from "@noovolari/leapp-core/models/aws/aws-sso-integration";
 import { constants } from "@noovolari/leapp-core/models/constants";
 import { AppService } from "../../services/app.service";
@@ -33,13 +33,14 @@ export const syncAllEvent = new BehaviorSubject<boolean>(false);
 export const integrationHighlight = new BehaviorSubject<number>(-1);
 
 @Component({
+  standalone: false,
   selector: "app-integration-bar",
   templateUrl: "./integration-bar.component.html",
   styleUrls: ["./integration-bar.component.scss"],
 })
 export class IntegrationBarComponent implements OnInit, OnDestroy {
-  @ViewChildren(MatLegacyMenuTrigger)
-  triggers: QueryList<MatLegacyMenuTrigger>;
+  @ViewChildren(MatMenuTrigger)
+  triggers: QueryList<MatMenuTrigger>;
 
   @ViewChild("ssoModalTemplate", { static: false })
   ssoModalTemplate: TemplateRef<any>;
@@ -87,6 +88,7 @@ export class IntegrationBarComponent implements OnInit, OnDestroy {
   private awsSsoOidcService: AwsSsoOidcService;
   private loggingService: LogService;
   private segmentService: SegmentService;
+  private highlightSubscription: Subscription;
 
   constructor(
     public optionsService: OptionsService,
@@ -145,7 +147,7 @@ export class IntegrationBarComponent implements OnInit, OnDestroy {
       }
     });
 
-    integrationHighlight.subscribe(() => {
+    this.highlightSubscription = integrationHighlight.subscribe(() => {
       //set highlighted row for integration
       this.selectedIntegrations.forEach((i) => (i.selected = false));
     });
@@ -160,6 +162,7 @@ export class IntegrationBarComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
     this.subscription2.unsubscribe();
     this.subscription3.unsubscribe();
+    this.highlightSubscription.unsubscribe();
   }
 
   selectedSsoConfigurationCheck(configuration: Integration): string {

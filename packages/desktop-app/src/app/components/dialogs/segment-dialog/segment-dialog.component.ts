@@ -8,6 +8,7 @@ import Segment from "@noovolari/leapp-core/models/segment";
 import { AppProviderService } from "../../../services/app-provider.service";
 
 @Component({
+  standalone: false,
   selector: "app-segment-dialog",
   templateUrl: "./segment-dialog.component.html",
   styleUrls: ["./segment-dialog.component.scss"],
@@ -28,7 +29,10 @@ export class SegmentDialogComponent implements OnInit, OnDestroy {
 
   private subscription;
 
-  constructor(private appService: AppService, private appProviderService: AppProviderService) {
+  constructor(
+    private appService: AppService,
+    private appProviderService: AppProviderService
+  ) {
     this.temporaryName = "";
     this.segments = [...this.appProviderService.segmentService.list()];
     this.subscription = globalFilterGroup.subscribe((value) => (this.currentFilterGroup = Object.assign({}, value)));

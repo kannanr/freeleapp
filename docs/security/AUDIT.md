@@ -3,7 +3,8 @@
 ## Decision
 
 **Not approved for production cloud credentials.** These patches reduce concrete risks, but do not constitute a
-complete security certification. In particular, unsupported Angular and the privileged renderer remain open blockers.
+complete security certification. The dependency modernization in [UPGRADE.md](UPGRADE.md) replaces unsupported Angular;
+the privileged renderer and the other unresolved findings below remain blockers.
 No signed patched binary has been built or independently assessed yet. Do not install upstream binaries expecting
 these changes, and do not bypass Gatekeeper to test this fork with real credentials.
 
@@ -27,7 +28,7 @@ these changes, and do not bypass Gatekeeper to test this fork with real credenti
 | --- | --- | --- | --- |
 | SEC-001 | P0 | A live Font Awesome CDN script ran inside the Node-enabled renderer. CDN/kit compromise would therefore execute with local process privileges. | Removed remote script; bundled Font Awesome CSS/fonts; `script-src 'self'`, no inline/eval/data script exceptions. |
 | SEC-002 | P0 | Main/tray renderer has `nodeIntegration: true`, `contextIsolation: false` and `@electron/remote`. An applicable renderer injection bug could reach filesystem, shell and secrets. | **Open architecture blocker.** Navigation, redirects, new windows, webviews, permissions and IPC were constrained as defense in depth; Node/remote access remains. |
-| SEC-003 | P0 | Angular 15 is unsupported; installed Angular packages have high-severity advisories, including sanitizer/XSS findings. Other transitive dependencies also have high/critical advisories. | **Open dependency blocker.** Electron, Axios, follow-redirects and markdown-it were updated; this does not fix the rest of the tree. No blanket `npm audit fix --force` was used. |
+| SEC-003 | P0 | Angular 15 was unsupported; installed Angular packages had high-severity advisories, including sanitizer/XSS findings. Other transitive dependencies also had high/critical advisories. | Supported Angular 22 and current compatible SDK/tooling versions are now installed and tested; see [UPGRADE.md](UPGRADE.md) for the renewed scan and limits. Remaining findings and the actual packaged dependency tree still require review. No blanket `npm audit fix --force` was used. |
 | SEC-004 | P1 | AWS credentials, SSM environment files and macOS Azure token caches relied on default write permissions; a typical umask can create mode 0644 files. Supplying a creation mode alone does not repair an existing file. | Shared private writer creates mode 0600 files, checks the opened inode, tightens existing permissions before truncation, rejects final-component symlinks and hard links, and closes descriptors on errors. New FileService directories use mode 0700. |
 | SEC-005 | P1 | A personal fork retained upstream update/feed/install destinations, allowing upstream releases to replace patched builds. | Fork-owned feed/app ID; updates disabled by default, including unpackaged builds; no install-on-quit; bundled-only changelog; upstream Homebrew publishing job removed. Re-enabling updates requires signed fork releases and additional verification. |
 | SEC-006 | P1 | Arbitrary schemes were passed to OS URL handlers; authentication windows relied on implicit security defaults. | External/authentication links require HTTPS without userinfo/control characters. Auth windows explicitly disable Node, enable isolation/sandbox/web security, deny popups, non-HTTPS navigation and permission grants. HTTP/custom-scheme IdPs may no longer work. |
@@ -50,7 +51,7 @@ Use `npm audit --package-lock-only --ignore-scripts --json` separately at the ro
 link can expose development dependencies to the scanner, and some tooling is listed as runtime dependencies.
 Local linked-package lock records were refreshed after the direct dependency updates.
 
-Baseline scanner counts (packages with advisories, not distinct CVEs, not proven exploitable paths):
+Historical baseline scanner counts (packages with advisories, not distinct CVEs, not proven exploitable paths):
 
 | Lockfile | High | Critical | Total |
 | --- | ---: | ---: | ---: |
@@ -62,10 +63,14 @@ Remaining examples requiring reachability review include Angular, `fast-xml-pars
 `tar`. Angular SSR advisories do not automatically apply to a desktop app; conversely, build-time dependencies can
 still compromise release output. Scan counts alone cannot settle either question.
 
-After this patch set and linked-lock refresh: root **34 high / 1 critical / 50 total**; core **31 high / 3 critical /
+After the initial hardening patch set and linked-lock refresh: root **34 high / 1 critical / 50 total**; core **31 high / 3 critical /
 74 total**; desktop **60 high / 6 critical / 135 total**. Desktop `--omit=dev` reports **37 high / 3 critical / 90 total**,
 subject to the linked-package caveat above. The scanner no longer flags Axios, Electron, follow-redirects or markdown-it
 in the three lockfiles. These counts are dated observations, not a future clean bill of health.
+
+The subsequent modernization scan is recorded in [UPGRADE.md](UPGRADE.md): no critical findings in any tree, no high
+findings in root/core or the desktop omit-dev approximation, and one development-tool high finding in the desktop
+full tree. These scanner classifications are not a verified shipped SBOM.
 
 Sources: [Angular support policy](https://angular.dev/reference/releases),
 [Electron security checklist](https://www.electronjs.org/docs/latest/tutorial/security),
@@ -84,7 +89,7 @@ checked against Node's published SHA-256), after initial checks with Node 26.7.0
 runtime target Node 24. Tests were run with an isolated HOME and AWS/Azure environment settings removed.
 Package installation used `--ignore-scripts`: the native Electron application was deliberately not launched.
 
-Verified locally on Apple Silicon with Node 24.22.1:
+Initial hardening verification on Apple Silicon with Node 24.22.1 (before the subsequent modernization):
 
 | Check | Result |
 | --- | --- |
@@ -103,7 +108,8 @@ despite passing. Neither unit-test success nor compilation proves that a native 
 
 Before any approval:
 
-1. Migrate to supported Angular and compatible libraries, with regression coverage and renewed advisory/reachability review.
+1. Supported Angular and compatible libraries are now installed and regression-tested; complete native-flow and advisory
+   reachability verification rather than treating compilation as proof of safety.
 2. Move core/native operations to the main process; add a narrow validated preload API; disable renderer Node/remote,
    enable context isolation and sandboxing. Do not simply flip flags: the current services call Node synchronously.
 3. Review and reduce the actual packaged dependency tree; pin and inspect native/build-time execution paths.

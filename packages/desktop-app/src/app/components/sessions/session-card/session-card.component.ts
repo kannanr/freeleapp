@@ -12,6 +12,7 @@ import { OptionsService } from "../../../services/options.service";
 import { SelectedSessionActionsService } from "../../../services/selected-session-actions.service";
 
 @Component({
+  standalone: false,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: "tr[app-session-card]",
   templateUrl: "./session-card.component.html",
@@ -28,7 +29,7 @@ export class SessionCardComponent implements OnInit {
   globalColumns: IGlobalColumns;
 
   @Input()
-  globalColumnsCount: string;
+  globalColumnsCount: number;
 
   @Input()
   isSelected: boolean;

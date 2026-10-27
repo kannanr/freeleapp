@@ -6,6 +6,7 @@ import { SelectedSessionActionsService } from "../../services/selected-session-a
 import { OptionsService } from "../../services/options.service";
 
 @Component({
+  standalone: false,
   selector: "app-bottom-bar",
   templateUrl: "./bottom-bar.component.html",
   styleUrls: ["./bottom-bar.component.scss"],
@@ -20,7 +21,10 @@ export class BottomBarComponent {
   public eSessionType = SessionType;
   public eSessionStatus = SessionStatus;
 
-  constructor(private selectedSessionActionsService: SelectedSessionActionsService, public optionsService: OptionsService) {}
+  constructor(
+    private selectedSessionActionsService: SelectedSessionActionsService,
+    public optionsService: OptionsService
+  ) {}
 
   get isPinned(): boolean {
     return this.selectedSessionActionsService.isPinned(this.selectedSession);

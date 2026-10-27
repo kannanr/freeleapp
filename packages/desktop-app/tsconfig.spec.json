@@ -1,16 +1,19 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "strict": false,
     "allowSyntheticDefaultImports" : true,
     "baseUrl": "./",
     "declaration": false,
     "experimentalDecorators": true,
     "lib": ["ES2019", "DOM"],
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "ignoreDeprecations": "6.0",
     "sourceMap": true,
-    "target": "ES6",
-    "typeRoots": ["../node_modules/@types"],
+    "target": "ES2022",
+    "useDefineForClassFields": false,
+    "typeRoots": ["./node_modules/@types"],
     "paths": {
       "stream": ["node_modules/stream-browserify"],
       "assert": ["node_modules/assert"],

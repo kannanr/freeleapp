@@ -26,6 +26,7 @@ import { LocalstackSessionService } from "@noovolari/leapp-core/services/session
 import { withRecentRegions } from "../../../services/region-options";
 
 @Component({
+  standalone: false,
   selector: "app-create-dialog",
   templateUrl: "./create-dialog.component.html",
   styleUrls: ["./create-dialog.component.scss"],

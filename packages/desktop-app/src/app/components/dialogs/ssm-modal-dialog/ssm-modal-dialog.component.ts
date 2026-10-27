@@ -17,6 +17,7 @@ import { copiedCommandMessage, defaultTunnelName, emptyTunnelDraft, resolveForwa
 import { SessionStatus } from "@noovolari/leapp-core/models/session-status";
 
 @Component({
+  standalone: false,
   selector: "app-ssm-modal-dialog",
   templateUrl: "./ssm-modal-dialog.component.html",
   styleUrls: ["./ssm-modal-dialog.component.scss"],
@@ -40,7 +41,11 @@ export class SsmModalDialogComponent implements OnInit {
   private sessionFactory: SessionFactory;
   private ssmService: SsmService;
 
-  constructor(private appService: AppService, private appProviderService: AppProviderService, private messageToasterService: MessageToasterService) {}
+  constructor(
+    private appService: AppService,
+    private appProviderService: AppProviderService,
+    private messageToasterService: MessageToasterService
+  ) {}
 
   get suggestLocalPort(): () => Promise<number> {
     return () => this.appProviderService.ssmTunnelService.suggestLocalPort();

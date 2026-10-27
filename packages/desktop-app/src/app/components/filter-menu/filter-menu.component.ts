@@ -3,6 +3,7 @@ import { MatMenuTrigger } from "@angular/material/menu";
 import { FormGroup } from "@angular/forms";
 
 @Component({
+  standalone: false,
   selector: "app-filter-menu",
   templateUrl: "./filter-menu.component.html",
   styleUrls: ["./filter-menu.component.scss"],

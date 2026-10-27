@@ -28,6 +28,7 @@ import { AzureSessionService } from "@noovolari/leapp-core/services/session/azur
 import { AzureCoreService } from "@noovolari/leapp-core/services/azure-core-service";
 
 @Component({
+  standalone: false,
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],

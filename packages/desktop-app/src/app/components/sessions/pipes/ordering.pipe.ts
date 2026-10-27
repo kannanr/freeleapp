@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { Session } from "@noovolari/leapp-core/models/session";
 
 @Pipe({
+  standalone: false,
   name: "ordering",
 })
 export class OrderingPipe implements PipeTransform {

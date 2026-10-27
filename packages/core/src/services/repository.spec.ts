@@ -41,7 +41,6 @@ describe("Repository", () => {
       rimraf: jest.fn(),
       semver: jest.fn(),
       sudo: jest.fn(),
-      unzip: jest.fn(),
       url: jest.fn(),
     };
 
@@ -191,7 +190,7 @@ describe("Repository", () => {
     repository.workspace = workspace;
     repository.persistWorkspace(workspace);
 
-    expect(() => repository.getSessionById("notExistingId")).toThrowError("session with id notExistingId not found.");
+    expect(() => repository.getSessionById("notExistingId")).toThrow("session with id notExistingId not found.");
   });
 
   test("addSession() - add a new session to the array of sessions", () => {
@@ -289,7 +288,7 @@ describe("Repository", () => {
   });
 
   test("deleteSession() - also removes the session's SSM tunnels", () => {
-    const tunnel = (id: string, sessionId: string) => ({ id, sessionId } as any);
+    const tunnel = (id: string, sessionId: string) => ({ id, sessionId }) as any;
     const workspace: any = { sessions: [{ sessionId: "s1" }, { sessionId: "s2" }], ssmTunnels: [tunnel("t1", "s1"), tunnel("t2", "s2")] };
     repository.persistWorkspace = jest.fn();
     repository.getWorkspace = () => workspace;
@@ -303,7 +302,7 @@ describe("Repository", () => {
 
   test("deleteSession() - also removes the session's own profile, not a shared, custom or default one", () => {
     const sso = (sessionId: string, profileId: string) =>
-      ({ sessionId, sessionName: "payments", roleArn: "arn:aws:iam::111/Admin", type: SessionType.awsSsoRole, profileId } as any);
+      ({ sessionId, sessionName: "payments", roleArn: "arn:aws:iam::111/Admin", type: SessionType.awsSsoRole, profileId }) as any;
     const workspace: any = {
       sessions: [sso("s1", "own"), sso("s2", "own-2"), sso("s3", "own-2"), sso("s4", "custom"), sso("s5", "default")],
       profiles: [
@@ -1379,7 +1378,7 @@ describe("Repository", () => {
       pinned: "mock-pinned",
       segments: "mock-segments",
       ssmRegionBehaviour: "mock-ssm-region-behaviour",
-      remoteWorkspacesSettingsMap: { "team-id-user-id": { "session-id": { region: "region", profileName: "profile-name" } } },
+      remoteWorkspacesSettingsMap: { ["team-id-user-id"]: { ["session-id"]: { region: "region", profileName: "profile-name" } } },
     };
     repository.getWorkspace = jest.fn(() => mockedWorkspace);
     repository.persistWorkspace = jest.fn(() => mockedWorkspace);
@@ -1396,7 +1395,7 @@ describe("Repository", () => {
     expect(mockedWorkspace.segments).toEqual("mock-segments");
     expect(mockedWorkspace.ssmRegionBehaviour).toEqual("mock-ssm-region-behaviour");
     expect(mockedWorkspace.remoteWorkspacesSettingsMap).toEqual({
-      "team-id-user-id": { "session-id": { region: "region", profileName: "profile-name" } },
+      ["team-id-user-id"]: { ["session-id"]: { region: "region", profileName: "profile-name" } },
     });
     expect(repository.persistWorkspace).toHaveBeenCalled();
   });

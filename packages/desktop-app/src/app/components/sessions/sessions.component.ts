@@ -31,6 +31,7 @@ export interface ArrowSettings {
 }
 
 @Component({
+  standalone: false,
   selector: "app-session",
   templateUrl: "./sessions.component.html",
   styleUrls: ["./sessions.component.scss"],

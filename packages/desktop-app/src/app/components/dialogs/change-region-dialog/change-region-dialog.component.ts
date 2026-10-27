@@ -10,6 +10,7 @@ import { MessageToasterService, ToastLevel } from "../../../services/message-toa
 import { withRecentRegions } from "../../../services/region-options";
 
 @Component({
+  standalone: false,
   selector: "app-change-region-dialog",
   templateUrl: "./change-region-dialog.component.html",
   styleUrls: ["./change-region-dialog.component.scss"],
@@ -27,7 +28,11 @@ export class ChangeRegionDialogComponent implements OnInit {
   private azureCoreService: AzureCoreService;
   private regionService: RegionsService;
 
-  constructor(private appService: AppService, private appProviderService: AppProviderService, private messageToasterService: MessageToasterService) {
+  constructor(
+    private appService: AppService,
+    private appProviderService: AppProviderService,
+    private messageToasterService: MessageToasterService
+  ) {
     this.awsCoreService = appProviderService.awsCoreService;
     this.azureCoreService = appProviderService.azureCoreService;
     this.regionService = appProviderService.regionsService;

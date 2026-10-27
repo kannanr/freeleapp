@@ -24,6 +24,7 @@ import { IKeychainService } from "@noovolari/leapp-core/interfaces/i-keychain-se
 import { withRecentRegions } from "../../../services/region-options";
 
 @Component({
+  standalone: false,
   selector: "app-edit-dialog",
   templateUrl: "./edit-dialog.component.html",
   styleUrls: ["./edit-dialog.component.scss"],

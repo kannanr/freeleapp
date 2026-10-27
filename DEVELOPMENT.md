@@ -5,13 +5,13 @@ Freeleapp is a monorepo with two packages:
 | Package | Path | What it is |
 |---------|------|------------|
 | Core | `packages/core` | Domain logic: sessions, integrations, named profiles, credential files, workspace storage and migrations |
-| Desktop app | `packages/desktop-app` | Electron main process (`electron/`) and the Angular 15 renderer (`src/`) that uses Core |
+| Desktop app | `packages/desktop-app` | Electron main process (`electron/`) and the Angular 22 renderer (`src/`) that uses Core |
 
 The renderer runs with Node.js integration: Core and the Angular services call Node modules (`fs`, `keytar`, `child_process`) directly, and a few Electron APIs through `@electron/remote`.
 
 ## Requirements
 
-- Node.js 24, the version bundled with Electron 44 (see `.nvmrc`): `nvm use`
+- Development/CI Node.js 26.12.1 (see `.nvmrc`): `nvm use`. Electron 45 independently bundles Node 24.22.0.
 - Xcode 26 command line tools on macOS, to compile native modules and the Icon Composer icon
 - For SSM sessions: the AWS CLI and the Session Manager plugin
 
@@ -19,9 +19,9 @@ The renderer runs with Node.js integration: Core and the Angular services call N
 
 ```bash
 nvm use
-npm install                                   # root: lint and commit tooling
-cd packages/core && npm install && npm run build
-cd ../desktop-app && npm install              # rebuilds keytar for Electron
+npm ci                                        # root: lint and commit tooling
+cd packages/core && npm ci && npm run build
+cd ../desktop-app && npm ci                   # rebuilds keytar for Electron
 ```
 
 The desktop app depends on the local Core through `file:../core`, and imports its compiled output, so rebuild Core (`npm run build` in `packages/core`) after changing it.
@@ -40,10 +40,15 @@ Workspace data lives in `~/.freeleapp`, logs in `~/Library/Logs/Freeleapp`. To t
 ## Tests and lint
 
 ```bash
+npm run test:security                         # from the root; synthetic values only
 cd packages/core && npx jest
 cd packages/desktop-app && npm test -- --watch=false --browsers=ChromeHeadless
 npx eslint <files>                            # from the repository root
 ```
+
+Compatibility decisions and remaining verification limits are recorded in [docs/security/UPGRADE.md](docs/security/UPGRADE.md).
+Do not use peer-dependency override flags to hide incompatibilities or give a development build real cloud credentials
+before the blockers in [docs/security/AUDIT.md](docs/security/AUDIT.md) are resolved.
 
 ## Linux notes
 

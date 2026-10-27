@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef } from "ngx-bootstrap/modal";
 
 @Component({
+  standalone: false,
   selector: "app-authorization-dialog",
   templateUrl: "./authorization-dialog.component.html",
   styleUrls: ["./authorization-dialog.component.scss"],

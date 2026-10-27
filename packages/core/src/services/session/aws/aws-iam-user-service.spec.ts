@@ -472,8 +472,7 @@ describe("AwsIamUserService", () => {
             })
           );
 
-          const passedStsClient = JSON.stringify(params[1]);
-          expect(passedStsClient).toBe(JSON.stringify(new STSClient()));
+          expect(params[1]).toBeInstanceOf(STSClient);
 
           const passedDurationSeconds = JSON.stringify(params[2]);
           expect(passedDurationSeconds).toBe(
@@ -492,7 +491,7 @@ describe("AwsIamUserService", () => {
           await service.generateCredentials(mockedSessionId);
           const params = (service as any).generateSessionToken.mock.calls[0];
           expect(params[0]).toEqual(awsIamUserSession);
-          expect(JSON.stringify(params[1])).toEqual(JSON.stringify(new STSClient()));
+          expect(params[1]).toBeInstanceOf(STSClient);
           expect(params[2]).toEqual({
             // eslint-disable-next-line @typescript-eslint/naming-convention
             DurationSeconds: constants.sessionTokenDuration,

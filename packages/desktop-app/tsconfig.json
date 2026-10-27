@@ -5,6 +5,7 @@
     "strictInjectionParameters": true
   },
   "compilerOptions": {
+    "strict": false,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "declaration": false,
@@ -14,11 +15,13 @@
       "DOM"
     ],
     "module": "ES2020",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
+    "ignoreDeprecations": "6.0",
     "sourceMap": true,
-    "target": "ES2019",
+    "target": "ES2022",
+    "useDefineForClassFields": false,
     "typeRoots": [
-      "../node_modules/@types"
+      "./node_modules/@types"
     ],
     "paths": {
       "stream": [

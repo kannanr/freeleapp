@@ -19,6 +19,7 @@ import { LoggedEntry, LogLevel, LogService } from "@noovolari/leapp-core/service
 import { OperatingSystem } from "@noovolari/leapp-core/models/operating-system";
 
 @Component({
+  standalone: false,
   selector: "app-tray-menu",
   templateUrl: "./tray-menu.component.html",
   styleUrls: ["./tray-menu.component.scss"],

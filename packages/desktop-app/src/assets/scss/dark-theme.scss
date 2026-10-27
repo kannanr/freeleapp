@@ -37,11 +37,11 @@ body.dark-theme {
     padding-top: 12px!important;
   }
 
-  .mat-list-item:hover {
+  .mat-mdc-list-item:hover {
       background-color: $dark-hover-sidebar;
   }
 
-  .mat-list-base .mat-list-item {
+  .mat-mdc-list-base .mat-mdc-list-item {
     color: $dark-main-text-color;
   }
 
@@ -105,11 +105,11 @@ body.dark-theme {
 
   ///* Contextual Menu *///
 
-  .mat-menu-panel {
+  .mat-mdc-menu-panel {
     border: 1px solid $dark-mat-menu;
     background-color: $dark-modal-background !important;
 
-    .mat-menu-content {
+    .mat-mdc-menu-content {
       background-color: $dark-modal-background !important;
     }
 
@@ -121,13 +121,13 @@ body.dark-theme {
       background-color: $dark-session-card-border;
     }
 
-    .mat-menu-item,
+    .mat-mdc-menu-item,
     .mat-legacy-menu-item {
       background-color: $dark-modal-background !important;
       color: $dark-main-text-color !important;
       
       &:hover,
-      &.mat-menu-item-highlighted,
+      &.mat-mdc-menu-item-highlighted,
       &.mat-legacy-menu-item-highlighted,
       &:focus {
         background-color: $dark-modal-background !important;
@@ -191,7 +191,7 @@ body.dark-theme {
   }
 
   ///* SideBar Style *///
-  .mat-list-base .mat-list-item:hover, .mat-list-item.selected-integration {
+  .mat-mdc-list-base .mat-mdc-list-item:hover, .mat-mdc-list-item.selected-integration {
     background-color: $dark-hover-sidebar!important;
     .moon-More, .moon-Close {
       color: $dark-main-text-color!important;
@@ -261,13 +261,13 @@ body.dark-theme {
     div.authorization-code {
       color: $dark-main-text-color!important;
     }
-    .mat-tab-header {
+    .mat-mdc-tab-header {
       border-bottom: 0.3px solid $dark-session-card-border;
       border-top: none;
       border-right: none;
       border-left: none;
     }
-    div.mat-tab-label {
+    div.mat-mdc-tab {
       background-color: $dark-modal-background;
       color: $dark-main-text-color;
     }
@@ -419,11 +419,11 @@ body.dark-theme {
     color: $dark-main-text-color;
   }
 
-  .mat-menu-panel .mat-menu-item {
+  .mat-mdc-menu-panel .mat-mdc-menu-item {
     color: $dark-main-text-color;
   }
 
-  .mat-menu-item:hover:not([disabled])::after {
+  .mat-mdc-menu-item:hover:not([disabled])::after {
     background: rgba(255, 255, 255, 0.1);
   }
 

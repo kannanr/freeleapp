@@ -6,6 +6,7 @@ import { AppProviderService } from "../../services/app-provider.service";
 import { LoggedEntry, LogLevel } from "@noovolari/leapp-core/services/log-service";
 
 @Component({
+  standalone: false,
   selector: "app-leapp-select",
   templateUrl: "./leapp-select.component.html",
   styleUrls: ["./leapp-select.component.scss"],
@@ -39,7 +40,7 @@ export class LeappSelectComponent implements AfterViewInit {
   items: any[];
 
   @Input()
-  dropdownPosition: string;
+  dropdownPosition: "auto" | "top" | "bottom";
 
   @Input()
   defaultNewValue: any;
@@ -55,7 +56,10 @@ export class LeappSelectComponent implements AfterViewInit {
 
   temporaryName: string;
 
-  constructor(private domSanitizer: DomSanitizer, private appProviderService: AppProviderService) {
+  constructor(
+    private domSanitizer: DomSanitizer,
+    private appProviderService: AppProviderService
+  ) {
     this.temporaryName = "";
     this.uppercased = this.uppercased || true;
   }

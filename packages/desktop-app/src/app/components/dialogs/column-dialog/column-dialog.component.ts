@@ -5,6 +5,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { compactMode, globalColumns, IGlobalColumns } from "../../command-bar/command-bar.component";
 
 @Component({
+  standalone: false,
   selector: "app-column-dialog",
   templateUrl: "./column-dialog.component.html",
   styleUrls: ["./column-dialog.component.scss"],
@@ -25,7 +26,10 @@ export class ColumnDialogComponent implements OnInit, OnDestroy {
   private subscription2;
   private values;
 
-  constructor(private bsModalRef: BsModalRef, private appService: AppService) {}
+  constructor(
+    private bsModalRef: BsModalRef,
+    private appService: AppService
+  ) {}
 
   ngOnInit(): void {
     // Set new state

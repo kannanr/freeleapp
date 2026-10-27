@@ -3,6 +3,7 @@ import { Session } from "@noovolari/leapp-core/models/session";
 import { SessionStatus } from "@noovolari/leapp-core/models/session-status";
 
 @Pipe({
+  standalone: false,
   name: "filtering",
 })
 export class FilteringPipe implements PipeTransform {

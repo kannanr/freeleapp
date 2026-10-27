@@ -55,9 +55,9 @@ Do not use `sergioarojasm98/tap/freeleapp` to install this fork; it installs ups
 
 ```bash
 nvm use                      # Node version from .nvmrc
-npm install
-cd packages/core && npm install && npm run build
-cd ../desktop-app && npm install
+npm ci
+cd packages/core && npm ci && npm run build
+cd ../desktop-app && npm ci
 npx gushio gushio/target-build.js 'configuration production'
 npx electron-builder build --mac dir --arm64 --publish never -c.mac.identity=null   # Xcode 26 compiles the Liquid Glass icon
 ```

@@ -9,7 +9,6 @@ export interface INativeService {
   exec: any;
   spawn: any;
   net: any;
-  unzip: any;
   copydir: any;
   sudo: any;
   path: any;

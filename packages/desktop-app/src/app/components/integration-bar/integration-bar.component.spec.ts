@@ -1,18 +1,19 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { IntegrationBarComponent } from "./integration-bar.component";
+import { IntegrationBarComponent, integrationHighlight } from "./integration-bar.component";
 import { MAT_SNACK_BAR_DATA, MatSnackBarRef } from "@angular/material/snack-bar";
 import { mustInjected } from "../../../base-injectables";
 import { RouterTestingModule } from "@angular/router/testing";
 import { AppProviderService } from "../../services/app-provider.service";
 import { AwsSsoIntegration } from "@noovolari/leapp-core/models/aws/aws-sso-integration";
 import { IntegrationFactory } from "@noovolari/leapp-core/services/integration-factory";
+import { BehaviorSubject } from "rxjs";
 
 describe("IntegrationBarComponent", () => {
   let component: IntegrationBarComponent;
   let fixture: ComponentFixture<IntegrationBarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     const spyRepositoryService = jasmine.createSpyObj("Repository", {
       getProfiles: [],
       getSessions: [],
@@ -23,13 +24,13 @@ describe("IntegrationBarComponent", () => {
     });
     const spyBehaviouralSubjectService = jasmine.createSpyObj("BehaviouralSubjectService", [], {
       integrations: [],
-      integrations$: { subscribe: () => {} },
+      integrations$: new BehaviorSubject([]),
       setIntegrations: (_awsSsoIntegrations: AwsSsoIntegration[]) => void {},
       getIntegrations: () => [],
     });
 
     const spyIntegrationFactory = jasmine.createSpyObj("IntegrationFactory", {
-      getIntegrations: () => [],
+      getIntegrations: [],
     });
 
     const spyLeappCoreService = jasmine.createSpyObj("AppProviderService", [], {
@@ -61,18 +62,17 @@ describe("IntegrationBarComponent", () => {
     fixture = TestBed.createComponent(IntegrationBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    component.subscription = {
-      unsubscribe: () => {},
-    };
-    component.subscription2 = {
-      unsubscribe: () => {},
-    };
-    component.subscription3 = {
-      unsubscribe: () => {},
-    };
   });
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("unsubscribes from integration highlights when the view is destroyed", () => {
+    const selection = { id: "fake-integration", selected: true };
+    component.selectedIntegrations = [selection];
+    fixture.destroy();
+    integrationHighlight.next(-1);
+    expect(selection.selected).toBeTrue();
   });
 });

@@ -25,7 +25,7 @@ import { IIntegrationService } from "../../interfaces/i-integration-service";
 import { AwsSsoIntegrationCreationParams } from "../../models/aws/aws-sso-integration-creation-params";
 import { ThrottleService } from "../throttle-service";
 import { IKeychainService } from "../../interfaces/i-keychain-service";
-import { ConfiguredRetryStrategy } from "@aws-sdk/util-retry";
+import { ConfiguredRetryStrategy } from "@smithy/util-retry";
 import * as uuid from "uuid";
 import { AwsNamedProfile } from "../../models/aws/aws-named-profile";
 import { pickSsoRoleProfile } from "../sso-role-profile";

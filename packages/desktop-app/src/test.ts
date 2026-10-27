@@ -2,5 +2,10 @@
 import "zone.js/testing";
 import { getTestBed } from "@angular/core/testing";
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
+import { NgModule, provideZoneChangeDetection } from "@angular/core";
 
-getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
+// Match the production NgModule's zone-based behavior, not Angular 22's zoneless default.
+@NgModule({ providers: [provideZoneChangeDetection()] })
+class ZoneBasedTestModule {}
+
+getTestBed().initTestEnvironment([BrowserDynamicTestingModule, ZoneBasedTestModule], platformBrowserDynamicTesting());

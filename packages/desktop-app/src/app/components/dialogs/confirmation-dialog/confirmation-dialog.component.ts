@@ -3,6 +3,7 @@ import { BsModalRef } from "ngx-bootstrap/modal";
 import { constants } from "@noovolari/leapp-core/models/constants";
 
 @Component({
+  standalone: false,
   selector: "app-confirmation-dialog",
   templateUrl: "./confirmation-dialog.component.html",
   styleUrls: ["./confirmation-dialog.component.scss"],

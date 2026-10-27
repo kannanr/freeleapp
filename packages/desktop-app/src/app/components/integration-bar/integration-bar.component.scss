@@ -52,7 +52,7 @@ b.moon-More {
   top: 8px;
 }
 
-.mat-list-item:hover {
+.mat-mdc-list-item:hover {
   b.moon-More {
     display: inline-block;
     color: $text-color;
@@ -64,7 +64,7 @@ b.moon-More {
   }
 }
 
-.mat-list-item.disabled {
+.mat-mdc-list-item.disabled {
   opacity: 0.7;
 }
 
@@ -152,19 +152,19 @@ img {
 }
 
 ::ng-deep {
-  .mat-list-item.selected-integration:hover {
+  .mat-mdc-list-item.selected-integration:hover {
     background-color: $silver-25 !important;
   }
 
-  .selected-integration .mat-list-item-content {
+  .selected-integration .mdc-list-item__content {
     padding: 0 6px 0 !important;
   }
 
-  .selected-integration:hover .mat-list-item-content {
+  .selected-integration:hover .mdc-list-item__content {
     padding: 0 6px 0 !important;
   }
 
-  .selected-integration:hover .mat-list-item-content .mat-list-text .mat-line {
+  .selected-integration:hover .mdc-list-item__content .mat-mdc-list-item-unscoped-content .mat-line {
     section.status {
       left: 18px !important;
     }

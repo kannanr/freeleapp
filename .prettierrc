@@ -1,4 +1,4 @@
 {
-  "arrow-parens": ["error", "always"],
-  "trailing-spaces": "off"
+  "arrowParens": "always",
+  "trailingComma": "es5"
 }

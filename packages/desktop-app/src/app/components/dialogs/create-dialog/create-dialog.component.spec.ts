@@ -18,6 +18,7 @@ describe("CreateDialogComponent", () => {
     });
     const spyRepositoryService = jasmine.createSpyObj("Repository", {
       getProfiles: [],
+      getSessions: [],
       getColorTheme: () => constants.darkTheme,
     });
     const spyLeappCoreService = jasmine.createSpyObj("LeappCoreService", [], {
@@ -27,6 +28,8 @@ describe("CreateDialogComponent", () => {
       awsCoreService: { getRegions: () => [] },
       azureCoreService: { getLocations: () => [] },
       sessionFactory: { getSessionService: () => {} },
+      sessionManagementService: { getAssumableSessions: () => [] },
+      namedProfileService: { getDefaultProfileId: () => undefined, getSessionsWithNamedProfile: () => [] },
       workspaceOptionService: { colorTheme: "" },
     });
 

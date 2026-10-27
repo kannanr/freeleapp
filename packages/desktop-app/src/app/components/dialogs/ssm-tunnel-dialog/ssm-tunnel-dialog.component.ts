@@ -8,6 +8,7 @@ import { MessageToasterService, ToastLevel } from "../../../services/message-toa
 import { defaultTunnelName, resolveForwarding, TunnelDraft, tunnelDraftFrom } from "../../ssm-tunnels/tunnel-draft";
 
 @Component({
+  standalone: false,
   selector: "app-ssm-tunnel-dialog",
   templateUrl: "./ssm-tunnel-dialog.component.html",
   styleUrls: ["./ssm-tunnel-dialog.component.scss"],
@@ -19,7 +20,11 @@ export class SsmTunnelDialogComponent implements OnInit {
   draft: TunnelDraft;
   error: string;
 
-  constructor(private appService: AppService, private appProviderService: AppProviderService, private messageToasterService: MessageToasterService) {}
+  constructor(
+    private appService: AppService,
+    private appProviderService: AppProviderService,
+    private messageToasterService: MessageToasterService
+  ) {}
 
   get suggestLocalPort(): () => Promise<number> {
     return () => this.appProviderService.ssmTunnelService.suggestLocalPort();

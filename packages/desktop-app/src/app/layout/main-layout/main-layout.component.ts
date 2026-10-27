@@ -16,6 +16,7 @@ export const sidebarOverlayIdleMs = 2000;
 const sidebarWidth = 240;
 
 @Component({
+  standalone: false,
   selector: "app-main-layout",
   templateUrl: "./main-layout.component.html",
   styleUrls: ["./main-layout.component.scss"],
@@ -33,7 +34,10 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private overlayTimer: ReturnType<typeof setTimeout>;
 
-  constructor(private appProviderService: AppProviderService, private appNativeService: AppNativeService) {}
+  constructor(
+    private appProviderService: AppProviderService,
+    private appNativeService: AppNativeService
+  ) {}
 
   @HostListener("window:resize")
   onWindowResize(): void {

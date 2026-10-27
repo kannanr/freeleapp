@@ -5,7 +5,7 @@ import { SessionStatus } from "../../../models/session-status";
 import { SessionType } from "../../../models/session-type";
 import { LocalstackSessionRequest } from "./localstack-session-request";
 import { LocalstackSessionService } from "./localstack-session-service";
-import { LoggedException, LogLevel } from "../../log-service";
+import { LogLevel } from "../../log-service";
 import { constants } from "../../../models/constants";
 import { LocalstackSession } from "../../../models/localstack/localstack-session";
 
@@ -315,9 +315,8 @@ describe("LocalstackSessionService", () => {
 
     const localstackSessionService = new (LocalstackSessionService as any)(sessionNotifier, repository);
     (localstackSessionService as any).isThereAnotherPendingSessionWithSameNamedProfile = isThereAnotherPendingSessionWithSameNameProfile;
-    await expect(localstackSessionService.start("sessionId")).rejects.toThrow(
-      new LoggedException("Pending session with same named profile", this, LogLevel.info)
-    );
+    const pending = localstackSessionService.start("sessionId");
+    await expect(pending).rejects.toMatchObject({ message: "Pending session with same named profile", severity: LogLevel.info });
   });
 
   test("start - calls sessionError if an error occurs during the process", async () => {

@@ -118,7 +118,8 @@ export class UpdaterService {
 
   async getReleaseNote(): Promise<string> {
     try {
-      return this.markdown.render(this.electronService.fs.readFileSync(`${__dirname}/CHANGELOG.md`).toString());
+      const changelog = this.electronService.path.join(this.electronService.app.getAppPath(), "dist", "leapp-client", "CHANGELOG.md");
+      return this.markdown.render(this.electronService.fs.readFileSync(changelog).toString());
     } catch (_) {
       return "";
     }

@@ -3,6 +3,7 @@ import { BsModalRef } from "ngx-bootstrap/modal";
 import { WindowService } from "../../../services/window.service";
 
 @Component({
+  standalone: false,
   selector: "app-info-dialog",
   templateUrl: "./info-dialog.component.html",
   styleUrls: ["./info-dialog.component.scss"],
@@ -20,7 +21,10 @@ export class InfoDialogComponent implements OnInit {
   @Input()
   buttonName?: string;
 
-  constructor(private readonly bsModalRef: BsModalRef, private readonly windowService: WindowService) {}
+  constructor(
+    private readonly bsModalRef: BsModalRef,
+    private readonly windowService: WindowService
+  ) {}
 
   ngOnInit(): void {}
 

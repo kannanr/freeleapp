@@ -1,12 +1,10 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { ErrorHandler, NgModule } from "@angular/core";
+import { ErrorHandler, NgModule, provideZoneChangeDetection } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { LayoutModule } from "./layout/layout.module";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { ConfirmationDialogComponent } from "./components/dialogs/confirmation-dialog/confirmation-dialog.component";
-import { InputDialogComponent } from "./components/dialogs/input-dialog/input-dialog.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { TrayMenuComponent } from "./components/tray-menu/tray-menu.component";
@@ -15,7 +13,6 @@ import { ModalModule } from "ngx-bootstrap/modal";
 import { ErrorService } from "./services/middleware/error.service";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { ComponentsModule } from "./components/components.module";
-import { ToastrModule } from "ngx-toastr";
 
 @NgModule({
   declarations: [AppComponent, TrayMenuComponent],
@@ -30,12 +27,10 @@ import { ToastrModule } from "ngx-toastr";
     ReactiveFormsModule,
     NgSelectModule,
     LayoutModule,
-    TooltipModule.forRoot(),
-    ModalModule.forRoot(),
-    ToastrModule.forRoot(),
+    TooltipModule,
+    ModalModule,
   ],
-  entryComponents: [ConfirmationDialogComponent, InputDialogComponent],
-  providers: [{ provide: ErrorHandler, useClass: ErrorService }],
+  providers: [provideZoneChangeDetection(), { provide: ErrorHandler, useClass: ErrorService }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

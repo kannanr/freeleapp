@@ -1,7 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 import { ErrorService } from "./error.service";
 import { mustInjected } from "../../../base-injectables";
-import { ToastrModule } from "ngx-toastr";
 import { ErrorHandler } from "@angular/core";
 import { AppModule } from "../../app.module";
 import { AppProviderService } from "../app-provider.service";
@@ -21,7 +20,7 @@ describe("ErrorService", () => {
     });
 
     handler = TestBed.configureTestingModule({
-      imports: [AppModule, ToastrModule.forRoot()],
+      imports: [AppModule],
       providers: [{ provide: ErrorHandler, useClass: ErrorService }].concat(
         mustInjected().concat([{ provide: AppProviderService, useValue: spyLeappCoreService }])
       ),

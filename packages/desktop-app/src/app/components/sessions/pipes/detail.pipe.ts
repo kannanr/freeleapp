@@ -7,6 +7,7 @@ import { AwsSsoRoleSession } from "@noovolari/leapp-core/models/aws/aws-sso-role
 import { AwsIamRoleChainedSession } from "@noovolari/leapp-core/models/aws/aws-iam-role-chained-session";
 
 @Pipe({
+  standalone: false,
   name: "detail",
 })
 export class DetailPipe implements PipeTransform {

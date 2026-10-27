@@ -23,6 +23,7 @@ const statusLabels: Record<SsmTunnelStatus, string> = {
 };
 
 @Component({
+  standalone: false,
   selector: "app-ssm-tunnels",
   templateUrl: "./ssm-tunnels.component.html",
   styleUrls: ["./ssm-tunnels.component.scss"],

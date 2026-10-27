@@ -202,3 +202,30 @@ test('credential-bearing CI and release actions are pinned and fork-owned', () =
   assert.doesNotMatch(release, /sergioarojasm98\/tap|sergioarojasm98\/homebrew-tap|HOMEBREW_TAP_TOKEN/);
   assert.match(release, /npm run test:security/);
 });
+
+test('the upgraded app retains zone-based rendering and NgModule declarations', () => {
+  const app = fs.readFileSync(path.join(root, 'packages/desktop-app/src/app/app.module.ts'), 'utf8');
+  assert.match(app, /providers: \[provideZoneChangeDetection\(\)/);
+  assert.doesNotMatch(app, /entryComponents|ToastrModule/);
+  const components = fs.readFileSync(path.join(root, 'packages/desktop-app/src/app/components/components.module.ts'), 'utf8');
+  assert.doesNotMatch(components, /MatLegacy|legacy-menu|legacy-tabs|legacy-list|legacy-button|NgxJsonViewer/);
+  const visit = directory => {
+    for (const item of fs.readdirSync(directory, { withFileTypes: true })) {
+      const file = path.join(directory, item.name);
+      if (item.isDirectory()) visit(file);
+      else if (item.name.endsWith('.ts') && !item.name.endsWith('.spec.ts')) {
+        const source = fs.readFileSync(file, 'utf8');
+        for (const declaration of source.matchAll(/@(Component|Pipe|Directive)\(\{([^]*?)\}\)/g)) {
+          assert.match(declaration[2], /standalone:\s*false/, file);
+        }
+      }
+    }
+  };
+  visit(path.join(root, 'packages/desktop-app/src/app'));
+});
+
+test('upgraded renderer notes use the trusted application path, not a bundler shim', () => {
+  const source = fs.readFileSync(path.join(root, 'packages/desktop-app/src/app/services/updater.service.ts'), 'utf8');
+  assert.match(source, /path\.join\(this\.electronService\.app\.getAppPath\(\), "dist", "leapp-client", "CHANGELOG.md"\)/);
+  assert.doesNotMatch(source, /__dirname.*CHANGELOG/);
+});

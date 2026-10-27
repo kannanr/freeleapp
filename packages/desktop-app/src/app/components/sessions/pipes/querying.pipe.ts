@@ -6,6 +6,7 @@ import { AzureSession } from "@noovolari/leapp-core/models/azure/azure-session";
 import { AwsSsoRoleSession } from "@noovolari/leapp-core/models/aws/aws-sso-role-session";
 
 @Pipe({
+  standalone: false,
   name: "querying",
 })
 export class QueryingPipe implements PipeTransform {

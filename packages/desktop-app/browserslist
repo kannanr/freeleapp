@@ -5,4 +5,5 @@
 # You can see what browsers were selected by your queries by running:
 #   npx browserslist
 
-chrome >= 80
+# Electron 45 embeds Chromium 156; the application is not a general-purpose website.
+Chrome 156

@@ -47,6 +47,7 @@ export const globalColumns = new BehaviorSubject<IGlobalColumns>(null);
 export const globalColumnsCount = new BehaviorSubject<number>(null);
 
 @Component({
+  standalone: false,
   selector: "app-command-bar",
   templateUrl: "./command-bar.component.html",
   styleUrls: ["./command-bar.component.scss"],
