@@ -3,6 +3,7 @@ import { INativeService } from "../interfaces/i-native-service";
 import { constants } from "../models/constants";
 import { SerializedAccountEntity } from "@azure/msal-node/dist/cache/serializer/SerializerTypes";
 import { IKeychainService } from "../interfaces/i-keychain-service";
+import { writePrivateFileSync } from "./private-file";
 
 export interface AzureSubscription {
   id: string;
@@ -52,7 +53,7 @@ export class AzurePersistenceService {
     const finalData = isWin
       ? await this.iNativeService.msalEncryptionService.protectData(Buffer.from(data, "utf-8"), null, DataProtectionScope.currentUser)
       : data;
-    this.iNativeService.fs.writeFileSync(location, finalData);
+    writePrivateFileSync(this.iNativeService.fs, location, finalData);
   }
 
   async loadProfile(): Promise<AzureProfile> {
@@ -61,7 +62,7 @@ export class AzurePersistenceService {
   }
 
   async saveProfile(profile: AzureProfile): Promise<void> {
-    this.iNativeService.fs.writeFileSync(this.getProfileLocation(), JSON.stringify(profile, null, 4));
+    writePrivateFileSync(this.iNativeService.fs, this.getProfileLocation(), JSON.stringify(profile, null, 4));
   }
 
   async getAzureSecrets(integrationId: string): Promise<AzureSecrets> {

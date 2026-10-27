@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { UpdateDialogComponent } from "../components/dialogs/update-dialog/update-dialog.component";
 import compareVersions from "compare-versions";
-import { HttpClient } from "@angular/common/http";
 import md from "markdown-it";
 import { AppNativeService } from "./app-native.service";
 import { constants } from "@noovolari/leapp-core/models/constants";
@@ -27,7 +26,6 @@ export class UpdaterService {
 
   constructor(
     private bsModalService: BsModalService,
-    private httpClient: HttpClient,
     private electronService: AppNativeService,
     private windowService: WindowService,
     private leappCoreService: AppProviderService
@@ -112,28 +110,18 @@ export class UpdaterService {
   }
 
   /**
-   * Release notes bundled with the installed app (What's new). Falls back to the published changelog.
+   * Release notes bundled with the installed app (What's new).
    */
   async getInstalledReleaseNote(): Promise<string> {
-    try {
-      return this.markdown.render(this.electronService.fs.readFileSync(`${__dirname}/CHANGELOG.md`).toString());
-    } catch (_) {
-      return this.getReleaseNote();
-    }
+    return this.getReleaseNote();
   }
 
   async getReleaseNote(): Promise<string> {
-    return new Promise((resolve) => {
-      this.httpClient.get("https://raw.githubusercontent.com/sergioarojasm98/freeleapp/master/CHANGELOG.md", { responseType: "text" }).subscribe(
-        (data) => {
-          resolve(this.markdown.render(data));
-        },
-        (error) => {
-          console.log("error", error);
-          resolve("");
-        }
-      );
-    });
+    try {
+      return this.markdown.render(this.electronService.fs.readFileSync(`${__dirname}/CHANGELOG.md`).toString());
+    } catch (_) {
+      return "";
+    }
   }
 
   isReady(): boolean {

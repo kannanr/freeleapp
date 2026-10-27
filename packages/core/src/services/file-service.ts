@@ -1,5 +1,6 @@
 import { Subscription } from "rxjs";
 import { INativeService } from "../interfaces/i-native-service";
+import { writePrivateFileSync } from "./private-file";
 
 const cryptoJS = require("crypto-js");
 
@@ -96,7 +97,7 @@ export class FileService {
    * @param options - some options if needed - optional
    */
   newDir(path: string, options: { recursive: boolean }): void {
-    this.nativeService.fs.mkdirSync(path, options);
+    this.nativeService.fs.mkdirSync(path, { ...options, mode: 0o700 });
   }
 
   /**
@@ -107,7 +108,7 @@ export class FileService {
    * @param content - the content to write
    */
   writeFileSync(filePath: string, content: string): any {
-    return this.nativeService.fs.writeFileSync(filePath, content);
+    return writePrivateFileSync(this.nativeService.fs, filePath, content);
   }
 
   writeFileSyncWithOptions(filePath: string, content: string, options: any): any {

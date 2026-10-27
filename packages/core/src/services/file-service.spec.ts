@@ -26,6 +26,12 @@ describe("File Service", () => {
       join: jest.fn((...array) => array.join("/")),
     },
     fs: {
+      constants: require("fs").constants,
+      openSync: jest.fn(() => 123),
+      fstatSync: jest.fn(() => ({ isFile: () => true, nlink: 1, uid: process.geteuid() })),
+      fchmodSync: jest.fn(),
+      ftruncateSync: jest.fn(),
+      closeSync: jest.fn(),
       existsSync: jest.fn((_path) => _path === existsPath),
       writeFileSync: jest.fn((_file, _data) => {}),
       removeSync: jest.fn((_file) => {}),
@@ -124,6 +130,7 @@ describe("File Service", () => {
     const fileService = new FileService(nativeService);
     fileService.newDir(testPath, { recursive: true });
     expect(nativeService.fs.mkdirSync).toHaveBeenCalledTimes(1);
+    expect(nativeService.fs.mkdirSync).toHaveBeenCalledWith(testPath, { recursive: true, mode: 0o700 });
   });
 
   test("writeFileSync", () => {
@@ -131,7 +138,11 @@ describe("File Service", () => {
     const newPath = "new-path";
     const fileService = new FileService(nativeService);
     fileService.writeFileSync(newPath, data);
-    expect(nativeService.fs.writeFileSync).toHaveBeenNthCalledWith(1, newPath, data);
+    expect(nativeService.fs.openSync).toHaveBeenCalledWith(newPath, expect.any(Number), 0o600);
+    expect(nativeService.fs.fchmodSync).toHaveBeenCalledWith(123, 0o600);
+    expect(nativeService.fs.ftruncateSync).toHaveBeenCalledWith(123, 0);
+    expect(nativeService.fs.writeFileSync).toHaveBeenNthCalledWith(1, 123, data);
+    expect(nativeService.fs.closeSync).toHaveBeenCalledWith(123);
   });
 
   test("writeFileSyncWithOptions", () => {

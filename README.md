@@ -1,4 +1,8 @@
-# Freeleapp
+# Freeleapp — security fork
+
+**Not yet approved for production cloud credentials.** This fork tracks the security audit and hardening work in
+[docs/security/AUDIT.md](docs/security/AUDIT.md). No audited signed release of this fork has been published.
+Upstream binaries and the upstream Homebrew cask do **not** contain these patches.
 
 Temporary AWS and Azure credentials on your Mac, one click away. A maintained, free and open-source continuation of the [Leapp](https://github.com/Noovolari/leapp) desktop app.
 
@@ -11,7 +15,7 @@ Differences from upstream Leapp:
 - One edition with every feature: no Pro or Team tier, no sign-in.
 - No telemetry: the usage analytics client is removed.
 - Updated for current macOS: new UI and icon, resizable window, AWS console multi-session instead of a browser extension.
-- Update checks and release notes come from this repository's GitHub Releases.
+- In this security fork, automatic updates are disabled until its own signed releases are verified. Release notes are bundled, not fetched remotely.
 - Your Leapp setup moves over automatically: on first launch Freeleapp copies `~/.Leapp` to `~/.freeleapp` (the original stays as a backup) and moves keychain items to the `Freeleapp` service as they are used.
 
 Documentation: [freeleapp.com](https://freeleapp.com).
@@ -43,15 +47,9 @@ The core library (`packages/core`) holds the session logic and the desktop app i
 
 ## Install
 
-Install it with Homebrew:
-
-```bash
-brew install --cask sergioarojasm98/tap/freeleapp
-```
-
-Or add the tap once (`brew tap sergioarojasm98/tap`) and use the short name: `brew install --cask freeleapp`.
-
-Without Homebrew, download the `.dmg` from [Releases](https://github.com/sergioarojasm98/freeleapp/releases) and drag Freeleapp to Applications (Apple Silicon, macOS 13 Ventura or later). Builds are signed with a Developer ID and notarized by Apple, and the app updates itself.
+There is no approved installation of this security fork yet. Future signed Apple Silicon builds will be published
+under [kannanr/freeleapp Releases](https://github.com/kannanr/freeleapp/releases), after the audit blockers are resolved.
+Do not use `sergioarojasm98/tap/freeleapp` to install this fork; it installs upstream Freeleapp.
 
 ## Build
 
@@ -66,7 +64,8 @@ npx electron-builder build --mac dir --arm64 --publish never -c.mac.identity=nul
 
 Without `-c.mac.identity=null`, electron-builder signs with a Developer ID certificate from the keychain (or `CSC_LINK`). Release builds are signed and notarized in GitHub Actions.
 
-Tests: `npx jest` in `packages/core`, and `npm test -- --watch=false --browsers=ChromeHeadless` in `packages/desktop-app`.
+Tests: `npm run test:security` at the root, `npx jest` in `packages/core`, and
+`npm test -- --watch=false --browsers=ChromeHeadless` in `packages/desktop-app`.
 
 ## License
 

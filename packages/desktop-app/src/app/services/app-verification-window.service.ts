@@ -13,6 +13,7 @@ import {
 import { WindowService } from "./window.service";
 import { MessageToasterService, ToastLevel } from "./message-toaster.service";
 import { AppProviderService } from "./app-provider.service";
+import { validateOAuthCallback } from "@noovolari/leapp-core/services/oauth-callback";
 
 @Injectable({ providedIn: "root" })
 export class AppVerificationWindowService implements IAwsSsoOidcVerificationWindowService {
@@ -171,26 +172,29 @@ export class AppVerificationWindowService implements IAwsSsoOidcVerificationWind
         }
       };
       server = http.createServer((request, response) => {
-        const url = new URL(request.url, "http://127.0.0.1");
-        if (url.pathname !== "/oauth/callback") {
-          response.writeHead(404);
+        const callback = validateOAuthCallback(request.method, request.url, request.headers.host, new URL(redirectUri).host, state);
+        if (callback.kind === "ignore") {
+          response.writeHead(400, { ["Cache-Control"]: "no-store" });
           response.end();
           return;
         }
-        const error = url.searchParams.get("error");
-        const code = url.searchParams.get("code");
-        const ok = !error && !!code && url.searchParams.get("state") === state;
-        response.writeHead(200, { ["Content-Type"]: "text/html; charset=utf-8" });
+        const ok = callback.kind === "code";
+        response.writeHead(200, {
+          ["Content-Type"]: "text/html; charset=utf-8",
+          ["Cache-Control"]: "no-store",
+          ["Referrer-Policy"]: "no-referrer",
+          ["Content-Security-Policy"]: "default-src 'none'; style-src 'unsafe-inline'; frame-ancestors 'none'",
+        });
         response.end(
           ok
             ? this.callbackPage("Freeleapp is signed in", "You can close this tab and go back to Freeleapp.", true)
-            : this.callbackPage(
-                "Sign-in failed",
-                `AWS answered: ${this.escapeHtml(error || "an unexpected response")}. Try again from Freeleapp.`,
-                false
-              )
+            : this.callbackPage("Sign-in failed", "AWS did not authorize this sign-in. Try again from Freeleapp.", false)
         );
-        finish(ok ? null : new Error(`AWS SSO sign-in failed: ${error || "invalid callback"}`), { code, redirectUri });
+        if (callback.kind === "code") {
+          finish(null, { code: callback.code, redirectUri });
+        } else {
+          finish(new Error("AWS SSO sign-in was not authorized"));
+        }
       });
       timer = setTimeout(() => finish(new Error("AWS SSO sign-in timed out. Please try again.")), AppVerificationWindowService.signInTimeoutMs);
       server.on("error", (err) => finish(err));
@@ -273,10 +277,6 @@ export class AppVerificationWindowService implements IAwsSsoOidcVerificationWind
       `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" />${mark}</svg>` +
       `<h2>${title}</h2><p>${message}</p></div></body></html>`
     );
-  }
-
-  private escapeHtml(text: string): string {
-    return text.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   }
 
   private getAssociateTokenUrls() {

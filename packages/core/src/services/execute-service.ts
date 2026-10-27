@@ -141,17 +141,19 @@ export class ExecuteService {
     //  provides all the information needed.
     return new Promise((resolve, reject) => {
       execFn(command, { env, name: "Leapp", timeout: 60000 }, (err, stdout, stderr) => {
-        const info = { command, stdout, stderr, error: err };
-        if (info.error && info.error.cmd) {
-          delete info.error.cmd;
+        if (err && err.cmd) {
+          delete err.cmd;
         }
-        if (maskOutputLog) {
-          Object.assign(info, { stdout: "****", stderr: "****" });
-        }
-        this.logService.log(new LoggedEntry("execute from Leapp\ninfo:" + JSON.stringify(info, undefined, 4), this, LogLevel.info, false));
+        // Commands and their output can contain passwords, tokens and authentication URLs.
+        // Keep only execution status in logs; return output to the caller as before.
+        this.logService.log(new LoggedEntry(`Command completed: success=${!err}`, this, LogLevel.info, false));
         if (err) {
-          err.stdout = stdout;
-          err.stderr = stderr;
+          if (maskOutputLog) {
+            err.message = "Command failed (sensitive output hidden)";
+            err.stack = new Error(err.message).stack;
+          }
+          err.stdout = maskOutputLog ? "****" : stdout;
+          err.stderr = maskOutputLog ? "****" : stderr;
           reject(err);
         } else {
           resolve(stdout ? stdout : stderr);

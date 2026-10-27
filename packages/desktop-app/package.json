@@ -8,7 +8,7 @@
   },
   "description": "Freeleapp is a community fork of Leapp, a cross-platform cloud access app built on top of Electron.",
   "main": "electron/dist/electron/main.js",
-  "homepage": "https://github.com/sergioarojasm98/freeleapp",
+  "homepage": "https://github.com/kannanr/freeleapp",
   "scripts": {
     "setup": "gushio ../../gushio/clean-and-bootstrap.js desktop-app",
     "clean": "gushio gushio/target-clean.js",
@@ -34,7 +34,7 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "sergioarojasm98",
+        "owner": "kannanr",
         "repo": "freeleapp",
         "releaseType": "release"
       }
@@ -60,7 +60,7 @@
       "output": "release",
       "buildResources": "dist"
     },
-    "appId": "io.github.sergioarojasm98.freeleapp",
+    "appId": "io.github.kannanr.freeleapp",
     "dmg": {
       "icon": "src/assets/icons/icon.icns",
       "background": "src/assets/icons/background.png",
@@ -129,6 +129,7 @@
     }
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "7.3.1",
     "@angular/animations": "15.2.9",
     "@angular/cdk": "15.2.9",
     "@angular/common": "15.2.9",
@@ -151,7 +152,7 @@
     "@noovolari/leapp-core": "file:../core",
     "@smithy/fetch-http-handler": "2.4.2",
     "assert": "2.0.0",
-    "axios": "1.11.0",
+    "axios": "1.20.0",
     "bindings": "^1.5.0",
     "bootstrap": "~4.6.0",
     "chdir": "0.0.0",
@@ -168,7 +169,7 @@
     "electron-updater": "6.8.9",
     "emoji-regex": "^8.0.0",
     "extract-zip": "~2.0.1",
-    "follow-redirects": "1.15.6",
+    "follow-redirects": "1.16.2",
     "fs-extra": "~9.1.0",
     "github-url-to-object": "^4.0.6",
     "http-proxy-agent": "4.0.1",
@@ -181,7 +182,7 @@
     "js-ini": "1.5.1",
     "jwt-decode": "~3.1.2",
     "keytar": "7.9.0",
-    "markdown-it": "^12.0.6",
+    "markdown-it": "15.0.3",
     "mousetrap": "~1.6.5",
     "ms": "^2.1.3",
     "nan": "^2.29.0",
@@ -223,7 +224,7 @@
     "@types/node": "20.10.0",
     "@types/uuid": "^8.3.0",
     "dotenv": "^10.0.0",
-    "electron": "44.4.5",
+    "electron": "44.9.3",
     "electron-builder": "26.15.3",
     "electron-builder-squirrel-windows": "26.15.3",
     "gushio": "0.7.4",
@@ -244,6 +245,9 @@
     "ts-node": "^9.1.1",
     "typescript": "^4.9.0",
     "util": "^0.12.4"
+  },
+  "security": {
+    "autoUpdatesEnabled": false
   },
   "overrides": {
     "node-gyp": "12.4.0"

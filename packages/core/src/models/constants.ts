@@ -8,7 +8,7 @@ export const constants = {
   rsaBinFileDestination: ".freeleapp/rsa.bin",
   lockFileDestination: ".freeleapp/freeleapp-lock.json",
   lockFileBackupPath: ".freeleapp/freeleapp-lock.backup.bin",
-  latestUrl: "https://github.com/sergioarojasm98/freeleapp/releases/latest",
+  latestUrl: "https://github.com/kannanr/freeleapp/releases/latest",
   docsUrl: "https://freeleapp.com",
   workspaceLastVersion: 12,
   localWorkspaceName: "Local workspace",

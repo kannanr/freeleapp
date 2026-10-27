@@ -4,10 +4,10 @@
     "name": "Sergio Rojas",
     "email": "sergioarojasm98@users.noreply.github.com"
   },
-  "repository": "https://github.com/sergioarojasm98/freeleapp",
+  "repository": "https://github.com/kannanr/freeleapp",
   "private": true,
   "category": "public.app-category.developer-tools",
-  "homepage": "https://github.com/sergioarojasm98/freeleapp",
+  "homepage": "https://github.com/kannanr/freeleapp",
   "devDependencies": {
     "@angular-eslint/builder": "13.1.0",
     "@angular-eslint/eslint-plugin": "13.1.0",
@@ -33,6 +33,7 @@
     "typescript": "4.5.5"
   },
   "scripts": {
+    "test:security": "node --test scripts/security/*.test.cjs",
     "bootstrap": "npm install && gushio gushio/bootstrap.js core desktop-app",
     "clean-and-bootstrap": "npm install && gushio gushio/clean-and-bootstrap.js core desktop-app",
     "lint": "eslint .",

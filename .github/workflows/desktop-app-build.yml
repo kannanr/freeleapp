@@ -1,4 +1,6 @@
 name: CI
+permissions:
+  contents: read
 
 on:
   push:
@@ -22,26 +24,31 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version-file: .nvmrc
 
       - name: Install root dependencies
-        run: npm install
+        run: npm ci --ignore-scripts
+
+      - name: Test security boundaries
+        run: npm run test:security
 
       - name: Build and test core
         working-directory: packages/core
         run: |
-          npm install
+          npm ci --ignore-scripts
           npm run build
           npx jest
 
       # Native modules and the Electron binary are not needed for the Angular unit tests
       - name: Install desktop app dependencies
         working-directory: packages/desktop-app
-        run: npm install --ignore-scripts
+        run: npm ci --ignore-scripts
 
       - name: Test desktop app
         working-directory: packages/desktop-app

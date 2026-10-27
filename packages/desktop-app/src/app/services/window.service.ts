@@ -7,6 +7,7 @@ import { IOpenExternalUrlService } from "@noovolari/leapp-core/interfaces/i-open
 import { AppProviderService } from "./app-provider.service";
 import { LoggedEntry, LogLevel } from "@noovolari/leapp-core/services/log-service";
 import { AuthorizationDialogComponent } from "../components/dialogs/authorization-dialog/authorization-dialog.component";
+import { isSafeExternalUrl } from "@noovolari/leapp-core/services/external-url";
 
 @Injectable({
   providedIn: "root",
@@ -28,6 +29,9 @@ export class WindowService implements IOpenExternalUrlService {
    * @returns return a new browser window
    */
   newWindow(url: string, show: boolean, title?: string, x?: number, y?: number): any {
+    if (!isSafeExternalUrl(url)) {
+      throw new Error("Authentication windows require an HTTPS URL without embedded credentials");
+    }
     const opts = {
       width: 514,
       height: 550,
@@ -35,6 +39,10 @@ export class WindowService implements IOpenExternalUrlService {
       show,
       title,
       webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        sandbox: true,
+        webSecurity: true,
         devTools: !environment.production,
         partition: `persist:leapp-${btoa(url)}`,
       },
@@ -54,6 +62,16 @@ export class WindowService implements IOpenExternalUrlService {
       this.currentWindow = null;
     }
     this.currentWindow = new this.electronService.browserWindow(opts);
+    this.currentWindow.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
+    this.currentWindow.webContents.session.setPermissionRequestHandler((_contents: any, _permission: string, callback: any) => callback(false));
+    this.currentWindow.webContents.session.setPermissionCheckHandler(() => false);
+    const restrictNavigation = (event: any, destination: string) => {
+      if (!isSafeExternalUrl(destination)) {
+        event.preventDefault();
+      }
+    };
+    this.currentWindow.webContents.on("will-navigate", restrictNavigation);
+    this.currentWindow.webContents.on("will-redirect", restrictNavigation);
     if (this.electronService.os.platform() === this.windowOs) {
       this.electronService.menu.setApplicationMenu(null);
     }
@@ -112,6 +130,9 @@ export class WindowService implements IOpenExternalUrlService {
    * @param url - url to open
    */
   openExternalUrl(url: string): void {
+    if (!isSafeExternalUrl(url)) {
+      throw new Error("Refusing to open a non-HTTPS URL or a URL containing credentials");
+    }
     this.electronService.shell.openExternal(url);
   }
 

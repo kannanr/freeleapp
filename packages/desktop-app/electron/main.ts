@@ -1,7 +1,7 @@
 import { contextMenu } from "./context-menu";
 import { migrateLegacyData } from "./legacy-data-migration";
+import { hardenPrivilegedWindow, isTrustedRendererEvent } from "./security-policy";
 import * as path from "path";
-import { environment } from "../src/environments/environment";
 
 const { app, BrowserWindow, ipcMain, Tray, Menu, systemPreferences } = require("electron");
 const electronLocalshortcut = require('electron-localshortcut');
@@ -40,12 +40,14 @@ const windowDefaultConfig = {
     icon: path.join(__dirname, `assets/images/Leapp.png`),
     resizable: true,
     webPreferences: {
-      devTools: !environment.production,
+      // Angular's file replacements do not apply to the separately compiled main process.
+      devTools: !app.isPackaged,
       contextIsolation: false,
       nodeIntegration: true
     },
   },
 };
+const appEntryUrl = url.pathToFileURL(path.join(windowDefaultConfig.dir, "index.html")).href;
 if (process.platform !== "win32") {
   windowDefaultConfig.browserWindow["titleBarStyle"] = "hidden";
   windowDefaultConfig.browserWindow["titleBarOverlay"] = true;
@@ -71,25 +73,23 @@ log.transports.file.format = "[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] [{process
 let installingUpdate = false;
 
 const buildAutoUpdater = (win: any): void => {
+  // A fork must never silently replace its security patches with an upstream release.
+  // Enable only after this fork has its own independently verified signed releases.
+  const metadata = require("../../../package.json");
+  const feed = metadata.build.publish[0];
+  if (!app.isPackaged || metadata.security?.autoUpdatesEnabled !== true || feed.owner !== "kannanr" || feed.repo !== "freeleapp") {
+    log.info("[AUTO-UPDATER] Disabled pending audited, signed fork releases");
+    return;
+  }
   autoUpdater.allowDowngrade = false;
   autoUpdater.allowPrerelease = false;
+  autoUpdater.autoInstallOnAppQuit = false;
   // Downloads start below, depending on the Automatically Download Updates setting sent by the renderer
   autoUpdater.autoDownload = false;
 
-  // Force dev update config for testing auto-updater in development
-  if (!environment.production) {
-    autoUpdater.forceDevUpdateConfig = true;
-    console.log("[AUTO-UPDATER] Forcing dev update config for testing");
-  }
-
   const minutes = 10;
 
-  const data = {
-    provider: "github",
-    owner: "sergioarojasm98",
-    repo: "freeleapp",
-  };
-  autoUpdater.setFeedURL(data);
+  autoUpdater.setFeedURL({ provider: "github", owner: feed.owner, repo: feed.repo });
 
   let autoDownload: boolean | undefined;
   let availableVersion: string | undefined;
@@ -117,7 +117,10 @@ const buildAutoUpdater = (win: any): void => {
   };
 
   // Sent once the workspace is loaded and again when the setting changes; the first one starts the checks
-  ipc.on("UPDATER_SETTINGS", (_, settings) => {
+  ipc.on("UPDATER_SETTINGS", (event, settings) => {
+    if (!isTrustedRendererEvent(event, win.webContents, appEntryUrl) || typeof settings?.autoDownload !== "boolean") {
+      return;
+    }
     const firstSettings = autoDownload === undefined;
     autoDownload = !!settings?.autoDownload;
     if (firstSettings) {
@@ -132,8 +135,8 @@ const buildAutoUpdater = (win: any): void => {
     }
   });
 
-  ipc.on("INSTALL_UPDATE", () => {
-    if (!downloadedVersion) {
+  ipc.on("INSTALL_UPDATE", (event) => {
+    if (!isTrustedRendererEvent(event, win.webContents, appEntryUrl) || !downloadedVersion) {
       return;
     }
     console.log("[AUTO-UPDATER] Installing", downloadedVersion);
@@ -187,6 +190,7 @@ const generateMainWindow = () => {
   const createWindow = () => {
     // Generate the App Window
     win = new BrowserWindow({ ...windowDefaultConfig.browserWindow });
+    hardenPrivilegedWindow(win, appEntryUrl);
     win.setMenuBarVisibility(false); // Hide Window Menu to make it compliant with MacOSX
     win.removeMenu(); // Remove Window Menu inside App, to make it compliant with Linux
     win.setMenu(null);
@@ -225,7 +229,7 @@ const generateMainWindow = () => {
     win.webContents.on("responsive", () => log.info("[RENDERER] Window is responding again"));
 
     // Open the dev tools only if not in production
-    if (!environment.production) {
+    if (!app.isPackaged) {
       // Open web tools for diagnostics
       win.webContents.once("dom-ready", () => {});
     }
@@ -242,7 +246,7 @@ const generateMainWindow = () => {
     // The hidden title bar is drawn by the app, so double-clicks are forwarded from the renderer and
     // handled like the native one, following System Settings > Desktop & Dock > "Double-click a window's title bar"
     ipc.on("title-bar-double-click", (evt) => {
-      if (BrowserWindow.fromWebContents(evt.sender)?.id !== win.id) {
+      if (!isTrustedRendererEvent(evt, win.webContents, appEntryUrl)) {
         return;
       }
       const action = systemPreferences.getUserDefault("AppleActionOnDoubleClick", "string");
@@ -257,7 +261,10 @@ const generateMainWindow = () => {
       }
     });
 
-    ipc.on("closed", () => {
+    ipc.on("closed", (event) => {
+      if (!isTrustedRendererEvent(event, win.webContents, appEntryUrl)) {
+        return;
+      }
       win.destroy();
       if (installingUpdate) {
         // quitAndInstall continues once every window is closed; quit anyway if it never does
@@ -294,6 +301,7 @@ const generateMainWindow = () => {
     opts["closable"] = false;
 
     trayWin = new BrowserWindow(opts);
+    hardenPrivilegedWindow(trayWin, appEntryUrl);
     trayWin.setMenuBarVisibility(false); // Hide Window Menu to make it compliant with MacOSX
     trayWin.removeMenu(); // Remove Window Menu inside App, to make it compliant with Linux
     trayWin.setMenu(null);
@@ -311,7 +319,7 @@ const generateMainWindow = () => {
     trayWin.setSize(taskbarWidth, taskbarHeight);
 
     // Open the dev tools only if not in production
-    if (!environment.production) {
+    if (!app.isPackaged) {
       // Open web tools for diagnostics
       trayWin.webContents.once("dom-ready", () => {});
     }
@@ -383,7 +391,7 @@ const generateMainWindow = () => {
     });
   }
   if (process.platform === "win32") {
-    app.setAppUserModelId("io.github.sergioarojasm98.freeleapp");
+    app.setAppUserModelId("io.github.kannanr.freeleapp");
   }
 };
 // =============================== //

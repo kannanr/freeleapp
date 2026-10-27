@@ -15,7 +15,7 @@ const environment = {
   defaultLocation: "eastus",
   defaultAwsProfileName: "default",
   defaultAzureProfileName: "default-azure",
-  latestUrl: "https://github.com/sergioarojasm98/freeleapp/releases/latest",
+  latestUrl: "https://github.com/kannanr/freeleapp/releases/latest",
   // TODO: add actual endpoint
   apiEndpoint: "http://localhost:3000",
 };

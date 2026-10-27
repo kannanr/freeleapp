@@ -271,8 +271,18 @@ describe("MsalPersistenceService", () => {
     const mockedProfile = { profile: "mockedProfile" };
     let resultData;
     const mockedFs = {
-      writeFileSync: jest.fn((location, data) => {
+      constants: fs.constants,
+      openSync: jest.fn((location, _flags, mode) => {
         expect(location).toMatch(/a[/\\]\.azure[/\\]azureProfile\.json/);
+        expect(mode).toBe(0o600);
+        return 123;
+      }),
+      fstatSync: jest.fn(() => ({ isFile: () => true, nlink: 1, uid: process.geteuid() })),
+      fchmodSync: jest.fn(),
+      ftruncateSync: jest.fn(),
+      closeSync: jest.fn(),
+      writeFileSync: jest.fn((fd, data) => {
+        expect(fd).toBe(123);
         expect(data).toStrictEqual(JSON.stringify(mockedProfile, null, 4));
         resultData = data;
       }),
@@ -301,6 +311,8 @@ describe("MsalPersistenceService", () => {
     });
 
     await service.saveProfile(mockedProfile as any);
+    expect(mockedFs.fchmodSync).toHaveBeenCalledWith(123, 0o600);
+    expect(mockedFs.closeSync).toHaveBeenCalledWith(123);
     expect(JSON.parse(JSON.stringify(mockedProfile))).toStrictEqual(JSON.parse(resultData));
   });
 
