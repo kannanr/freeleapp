@@ -1,7 +1,7 @@
 # Freeleapp — security fork
 
 **Not yet approved for production cloud credentials.** This fork tracks the security audit and hardening work in
-[docs/security/AUDIT.md](docs/security/AUDIT.md). Version 1.3.3 is an ad-hoc-signed development release, not a Developer-ID-signed/notarized release.
+[docs/security/AUDIT.md](docs/security/AUDIT.md). Releases from 1.3.3 onward are ad-hoc-signed development releases, not a Developer-ID-signed/notarized release.
 Upstream binaries and the upstream Homebrew cask do **not** contain these patches.
 
 Temporary AWS and Azure credentials on your Mac, one click away. A maintained, free and open-source continuation of the [Leapp](https://github.com/Noovolari/leapp) desktop app.

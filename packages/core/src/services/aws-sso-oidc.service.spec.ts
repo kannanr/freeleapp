@@ -134,6 +134,63 @@ describe("AwsSsoOidcService refresh tokens", () => {
     expect(windowService.registerAuthorizationCodeClient).toHaveBeenCalledTimes(1);
   });
 
+  test("login rejects queued callers with the interactive sign-in error and drains the queue", async () => {
+    const kc = keychain();
+    const client = { clientId: "pkce-id", clientSecret: "pkce-secret", clientSecretExpiresAt: inFuture() };
+    let rejectSignIn!: (error: Error) => void;
+    let signalSignInStarted!: () => void;
+    const signInStarted = new Promise<void>((resolve) => {
+      signalSignInStarted = resolve;
+    });
+    const signInPromise = new Promise<any>((_resolve, reject) => {
+      rejectSignIn = reject;
+    });
+    const windowService = {
+      openVerificationWindow: jest.fn(),
+      registerAuthorizationCodeClient: jest.fn(async () => client),
+      signInWithAuthorizationCode: jest.fn(() => {
+        signalSignInStarted();
+        return signInPromise;
+      }),
+    };
+    const repository = { getAwsSsoIntegration: () => ({ browserOpening: constants.inBrowser }) };
+    const service = new AwsSsoOidcService(windowService as any, repository as any, false, kc as any);
+    const loginError = new Error("AWS SSO sign-in timed out");
+
+    const firstLogin = service.login("int-1", "us-east-1", "https://example.awsapps.com/start");
+    await signInStarted;
+    const queuedLogin = service.login("int-1", "us-east-1", "https://example.awsapps.com/start");
+    expect((service as any).setIntervalQueue).toHaveLength(1);
+
+    rejectSignIn(loginError);
+
+    await expect(firstLogin).rejects.toBe(loginError);
+    await expect(queuedLogin).rejects.toBe(loginError);
+    expect((service as any).setIntervalQueue).toHaveLength(0);
+  });
+
+  test("login starts a fresh interactive sign-in after a previous failure", async () => {
+    const kc = keychain();
+    const client = { clientId: "pkce-id", clientSecret: "pkce-secret", clientSecretExpiresAt: inFuture() };
+    const loginError = new Error("AWS SSO sign-in timed out");
+    const windowService = {
+      openVerificationWindow: jest.fn(),
+      registerAuthorizationCodeClient: jest.fn(async () => client),
+      signInWithAuthorizationCode: jest
+        .fn()
+        .mockRejectedValueOnce(loginError)
+        .mockResolvedValueOnce({ accessToken: "pkce-access", expiresIn: 28800, refreshToken: "pkce-refresh" }),
+    };
+    const repository = { getAwsSsoIntegration: () => ({ browserOpening: constants.inBrowser }) };
+    const service = new AwsSsoOidcService(windowService as any, repository as any, false, kc as any);
+
+    await expect(service.login("int-1", "us-east-1", "https://example.awsapps.com/start")).rejects.toBe(loginError);
+    const result = await service.login("int-1", "us-east-1", "https://example.awsapps.com/start");
+
+    expect(windowService.signInWithAuthorizationCode).toHaveBeenCalledTimes(2);
+    expect(result.accessToken).toBe("pkce-access");
+  });
+
   test("login falls back to the device code flow when the authorization code client can't be registered", async () => {
     const kc = keychain();
     const windowService = {

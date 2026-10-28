@@ -16,8 +16,8 @@
              [items]="segments"
              [(ngModel)]="selectedSegment" dropdownPosition="bottom">
     <ng-template ng-footer-tmp>
-      <div class="create-new" *ngIf="!checkNewSegment()"><i class="fal fa-plus-circle"></i>&nbsp;Add new filter</div>
-      <div class="create-new add" (click)="addNewSegment()" *ngIf="checkNewSegment()"><i class="fal fa-plus-circle"></i>&nbsp;Add "<strong>{{temporaryName}}</strong>"</div>
+      <div class="create-new" *ngIf="!checkNewSegment()"><i class="fas fa-circle-plus"></i>&nbsp;Add new filter</div>
+      <div class="create-new add" (click)="addNewSegment()" *ngIf="checkNewSegment()"><i class="fas fa-circle-plus"></i>&nbsp;Add "<strong>{{temporaryName}}</strong>"</div>
     </ng-template>
   </ng-select>
 

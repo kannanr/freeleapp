@@ -1,9 +1,9 @@
 <div class="holder {{this.data.link ? 'add-error-link-cursor' : ''}}">
   <div class="icon float">
-    <i *ngIf="data.className === 'toast-success'" class="fal fa-check-circle"></i>
-    <i *ngIf="data.className === 'toast-info'" class="fal fa-info-circle"></i>
-    <i *ngIf="data.className === 'toast-warning'" class="fal fa-exclamation-triangle"></i>
-    <i *ngIf="data.className === 'toast-error'" class="fal fa-exclamation-circle"></i>
+    <i *ngIf="data.className === 'toast-success'" class="fas fa-circle-check"></i>
+    <i *ngIf="data.className === 'toast-info'" class="fas fa-circle-info"></i>
+    <i *ngIf="data.className === 'toast-warning'" class="fas fa-triangle-exclamation"></i>
+    <i *ngIf="data.className === 'toast-error'" class="fas fa-circle-exclamation"></i>
   </div>
 
   <div [innerHTML]="data.html" class="large float" (click)="processOptionalLink();"></div>

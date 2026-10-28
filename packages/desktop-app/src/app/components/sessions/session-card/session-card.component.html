@@ -48,6 +48,6 @@
     class="{{isSelected ? 'selected' : (session.status !== eSessionStatus.inactive ? 'active' : '')}} table-column-6">
   <i class="status-item fas fa-circle {{session.status === eSessionStatus.active ? 'active' : 'offline'}}"
      *ngIf="session.status !== eSessionStatus.pending"></i>
-  <i class="status-item far fa-spinner-third fa-spin" *ngIf="session.status === eSessionStatus.pending"></i>
+  <i class="status-item fas fa-circle-notch fa-spin" *ngIf="session.status === eSessionStatus.pending"></i>
   <i class="hover-item moon-More" (click)="openContextMenu($event, session);"></i>
 </td>

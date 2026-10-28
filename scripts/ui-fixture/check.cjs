@@ -91,6 +91,38 @@ async function run() {
     assert.ok(await page.$('app-ssm-tunnels'), 'Tunnels must display its own view');
     assert.equal((await click('Pinned Sessions')).rows.length, 1, 'Returning from Tunnels must show the pinned subset');
     assert.equal((await click('Sessions')).rows.length, 2, 'Returning to Sessions must restore the whole list');
+    await page.waitForSelector('app-integration-bar .integration-provider-icon .red-dot, app-integration-bar .integration-provider-icon .green-dot');
+    const badge = await page.evaluate(() => {
+      const box = document.querySelector('app-integration-bar .integration-provider-icon');
+      const rect = element => { const r = element.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom }; };
+      return { logo: rect(box.querySelector('img')), dot: rect(box.querySelector('.red-dot, .green-dot')), row: rect(box.closest('mat-list-item')) };
+    });
+    const dotMiddle = (badge.dot.top + badge.dot.bottom) / 2;
+    assert.ok(dotMiddle >= badge.logo.top && dotMiddle <= badge.logo.bottom + 2, `Integration status dot must sit on the logo: ${JSON.stringify(badge)}`);
+    assert.ok(Math.abs(badge.dot.right - badge.logo.right) <= 6, `Integration status dot must sit on the logo's right corner: ${JSON.stringify(badge)}`);
+    assert.ok(badge.dot.bottom <= badge.row.bottom, 'Integration status dot must stay inside its row');
+    // Only the free Font Awesome package is bundled: every icon in the templates must have a glyph
+    const iconClasses = new Set();
+    const walk = dir => fs.readdirSync(dir, { withFileTypes: true }).forEach(entry => {
+      const file = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(file);
+      else if (file.endsWith('.html')) {
+        for (const [, value] of fs.readFileSync(file, 'utf8').matchAll(/class="([^"]*)"/g)) {
+          const tokens = value.replace(/\{\{[^}]*\}\}/g, ' ').split(/\s+/);
+          if (tokens.some(token => /^fa-(?!spin$|fw$)[a-z0-9-]+$/.test(token))) iconClasses.add(tokens.filter(token => /^fa/.test(token)).join(' '));
+        }
+      }
+    });
+    walk(path.join(appRoot, 'src/app'));
+    const missingIcons = await page.evaluate(classes => classes.filter(className => {
+      const icon = document.createElement('i');
+      icon.className = className;
+      document.body.appendChild(icon);
+      const content = getComputedStyle(icon, '::before').content;
+      icon.remove();
+      return !content || content === 'none' || content === 'normal';
+    }), [...iconClasses]);
+    assert.deepEqual(missingIcons, [], 'Every Font Awesome icon used by the templates must exist in the bundled free set');
     const screenshot = path.join(home, `${dark ? 'dark' : 'light'}-sidebar.png`);
     await page.screenshot({ path: screenshot });
     console.log(JSON.stringify({ home, before, pinned, all, screenshot, errors: output.filter(x => x.startsWith('PAGEERROR:')).slice(0, 8) }, null, 2));

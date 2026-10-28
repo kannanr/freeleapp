@@ -38,6 +38,8 @@ export class AwsSsoOidcService {
   private setIntervalQueue: Array<any>;
   private mainIntervalId: any;
   private loginMutex: boolean;
+  private loginError: any;
+  private loginFailed: boolean;
   private timeoutOccurred: boolean;
   private interruptOccurred: boolean;
   private refreshRetryDelaysMs = refreshRetryDelaysMs;
@@ -54,6 +56,8 @@ export class AwsSsoOidcService {
     this.generateSSOTokenResponse = null;
     this.setIntervalQueue = [];
     this.loginMutex = false;
+    this.loginError = null;
+    this.loginFailed = false;
     this.timeoutOccurred = false;
     this.interruptOccurred = false;
   }
@@ -73,12 +77,16 @@ export class AwsSsoOidcService {
       this.ssoOidc = new SSOOIDC({ region });
       this.generateSSOTokenResponse = null;
       this.setIntervalQueue = [];
+      this.loginError = null;
+      this.loginFailed = false;
       this.timeoutOccurred = false;
       this.interruptOccurred = false;
 
       try {
         this.generateSSOTokenResponse = await this.interactiveLogin(configurationId, region, portalUrl);
       } catch (err) {
+        this.loginError = err;
+        this.loginFailed = true;
         this.loginMutex = false;
         throw err;
       }
@@ -86,7 +94,19 @@ export class AwsSsoOidcService {
       this.loginMutex = false;
       return this.generateSSOTokenResponse;
     } else if (!this.loginMutex && this.setIntervalQueue.length > 0) {
-      return this.generateSSOTokenResponse;
+      if (this.generateSSOTokenResponse) {
+        return this.generateSSOTokenResponse;
+      }
+      if (this.interruptOccurred) {
+        throw new LoggedException("AWS SSO Interrupted.", this, LogLevel.info);
+      }
+      if (this.timeoutOccurred) {
+        throw new LoggedException("AWS SSO Timeout occurred. Please redo login procedure.", this, LogLevel.error);
+      }
+      if (this.loginFailed) {
+        throw this.loginError;
+      }
+      throw new LoggedException("AWS SSO login did not complete.", this, LogLevel.error);
     } else {
       return new Promise((resolve, reject) => {
         const repeatEvery = 500; // 0.5 second, we can make these more speedy as they just check a variable, no external calls here
@@ -111,6 +131,12 @@ export class AwsSsoOidcService {
             const resolvedIndex = this.setIntervalQueue.indexOf(resolved);
             this.setIntervalQueue.splice(resolvedIndex, 1);
             reject(new LoggedException("AWS SSO Timeout occurred. Please redo login procedure.", this, LogLevel.error));
+          } else if (this.loginFailed) {
+            clearInterval(resolved);
+
+            const resolvedIndex = this.setIntervalQueue.indexOf(resolved);
+            this.setIntervalQueue.splice(resolvedIndex, 1);
+            reject(this.loginError);
           }
         }, repeatEvery);
 

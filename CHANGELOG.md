@@ -4,6 +4,18 @@ All notable changes to Freeleapp are documented here. Versions follow [Semantic 
 
 Freeleapp is based on **Leapp 0.26.1**. For the history before the fork, see the [Leapp changelog](https://github.com/Noovolari/leapp/blob/v0.26.1/CHANGELOG.md).
 
+## 1.3.4 (2026-10-28)
+
+### Bug Fixes
+
+- **Sessions no longer stay "connecting" after a browser sign-in fails or times out.** Sessions waiting on the same sign-in now receive its error and stop, and the next start opens a new sign-in instead of needing an app restart.
+- The pending spinner, notification icons and "Add new filter" icon render again. They used paid Font Awesome icons that were previously loaded from a CDN script; they now use the bundled free set.
+- The integration online/offline dot sits on the provider logo again instead of below it.
+
+### Distribution and Limitations
+
+- Apple Silicon DMG only: `Freeleapp-1.3.4-arm64.dmg`, **ad-hoc signed, not Developer-ID signed or notarized**. The limitations listed for 1.3.3 still apply.
+
 ## 1.3.3 (2026-10-27)
 
 ### Bug Fixes

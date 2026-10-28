@@ -106,6 +106,8 @@ img {
 
 .integration-provider-icon {
   position: relative;
+  display: flex;
+  align-items: center;
   flex: 0 0 20px;
   width: 20px;
   height: 20px;
@@ -119,13 +121,23 @@ img {
     height: auto;
   }
 
+  // Badge on the lower-right corner of the logo, inside the icon box
   .status {
     left: auto !important;
     top: auto;
-    right: -2px;
-    bottom: -2px;
-    width: 8px;
-    height: 8px;
+    right: -5px;
+    bottom: 1px;
+    width: 10px;
+    height: 10px;
+    line-height: 0;
+
+    b {
+      display: block;
+      box-sizing: border-box;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+    }
   }
 }
 

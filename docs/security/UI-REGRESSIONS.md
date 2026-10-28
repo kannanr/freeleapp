@@ -54,7 +54,7 @@ Canceling an existing dialog is preferable to resetting user keychains while the
 - Dark and light native fixtures passed, including repeated session/pinned toggles and a round trip through Tunnels.
 - Mounted DMG payload passed the same native fixture checks; labels had equal x positions and zero vertical-centering offset.
 - DMG checksum and mounted application deep/strict ad-hoc signature validation passed; inspection volume detached.
-- Published naming convention for the fixed development image: `Freeleapp-1.3.3-arm64.dmg` (the previous 1.3.2 test images are superseded).
+- Published naming convention for the fixed development image: `Freeleapp-<version>-arm64.dmg`; 1.3.4 supersedes 1.3.3 and the earlier 1.3.2 test images.
 
 Live authentication, production signing/notarization and the open security architecture findings remain outside this
 synthetic UI verification. This is not a production-security certification.
